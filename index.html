@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tests Universae+</title>
+
+  <style>
+    /* ===== Reset ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* ===== Base ===== */
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    /* ===== Cards ===== */
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 22px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .card:hover {
+      background: #1c222b;
+      border-color: #58a6ff;
+      transform: translateY(-4px);
+      box-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
+    }
+
+    /* ===== Animación ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Mobile ===== */
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.8rem;
+      }
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <h1>Tests Universae+</h1>
+    </header>
+
+    <main class="grid">
+
+      <!-- Card 1 -->
+      <div class="card" onclick="location.href='tests/atencion-cliente/index.html'">
+        Atención al Cliente
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card" onclick="location.href='tests/diseno-material-comunicacion/index.html'">
+        Diseño y Material de Comunicación
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card" onclick="location.href='tests/medios-soportes-comunicacion/index.html'">
+        Medios y Soportes de Comunicación
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card" onclick="location.href='tests/relaciones-publicas-eventos/index.html'">
+        Relaciones Públicas y Eventos
+      </div>
+
+      <!-- Card 5 -->
+      <div class="card" onclick="location.href='tests/trabajo-campo-investigacion/index.html'">
+        Trabajo de Campo e Investigación
+      </div>
+
+    </main>
+
+  </div>
+
+</body>
+</html>
