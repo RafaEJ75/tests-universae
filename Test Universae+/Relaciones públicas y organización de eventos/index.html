@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relaciones Públicas y organización de eventos de marketing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.70);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
+
+    .app {
+      max-width: 900px;
+      width: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.85),
+        rgba(245,245,245,0.8)
+      );
+      border-radius: 20px;
+      padding: 1.7rem 2rem;
+      box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+    }
+
+    button.primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.secondary:hover {
+      transform: scale(1.05);
+      background: #d1d5db;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .question-card {
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-number {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #6b7280;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s, transform 0.05s;
+      cursor: pointer;
+    }
+
+    .answer-option:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .answer-option input {
+      margin-top: 0.15rem;
+      cursor: pointer;
+    }
+
+    .answer-text {
+      font-size: 0.9rem;
+    }
+
+    .answer-option.correct {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+    }
+
+    .answer-option.incorrect {
+      background: #fee2e2;
+      border: 1px solid #dc2626;
+    }
+
+    .answer-option.unselected-correct {
+      background: #ecfdf5;
+      border: 1px dashed #16a34a;
+    }
+
+    .results {
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .score {
+      font-weight: 600;
+    }
+
+    .score.good {
+      color: #16a34a;
+    }
+
+    .score.medium {
+      color: #f59e0b;
+    }
+
+    .score.bad {
+      color: #dc2626;
+    }
+
+    .info-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 1rem;
+        border-radius: 0.75rem;
+      }
+
+      .question-card {
+        padding: 0.8rem 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Relaciones Públicas y organización de eventos de marketing</h1>
+
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+    </div>
+
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
+  </div>
+
+  <script>
+    // ============================
+    // PREGUNTAS DEL TEST
+    // ============================
+    const questionsData = [
+      {
+        text: "¿Cómo puede ser el acceso a un evento?",
+        answers: [
+          { text: "Abierto, cerrado y mixto.", correct: false },
+          { text: "Libre y obligado.", correct: false },
+          { text: "Libre y controlado (discrecional y acotado).", correct: false },
+          { text: "Libre y restringido (obligado y discrecional).", correct: true }
+        ]
+      },
+      {
+        text: "¿Con qué tipo de acceso se cuenta si dentro del recinto puedes moverte donde quieras?:",
+        answers: [
+          { text: "Con restricciones obligado", correct: false },
+          { text: "Con restricciones discrecional", correct: true },
+          { text: "Libre limitado", correct: false },
+          { text: "Libre ilimitado", correct: false }
+        ]
+      },
+      {
+        text: "Las crisis:",
+        answers: [
+          { text: "Se gestionan a través de los gabinetes de crisis", correct: true },
+          { text: "Son sucesos previsibles y complejos.", correct: false },
+          { text: "Tienen un modelo general de resolución.", correct: false },
+          { text: "Todas son correctas.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es el segundo apartado de un informe final de evaluación de un evento?:",
+        answers: [
+          { text: "Objetivos", correct: true },
+          { text: "Asistentes", correct: false },
+          { text: "Timing", correct: false },
+          { text: "Resumen ejecutivo", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es el objetivo principal de un manual corporativo de relaciones públicas?:",
+        answers: [
+          { text: "Detallar todos los productos y servicios de la empresa.", correct: false },
+          { text: "Recoger las directrices sobre identidad corporativa que guían la utilización de la marca, ayudando a construir una imagen reconocible y coherente a lo largo del tiempo.", correct: true },
+          { text: "Elaborar informes de evaluación de eventos corporativos.", correct: false },
+          { text: "Establecer únicamente los colores y tipografías de la marca.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuáles son las fases en las que se desarrollan las actividades de organización del evento?:",
+        answers: [
+          { text: "Planificación y diseño, ejecución, cierre y evaluación.", correct: true },
+          { text: "Fijación de objetivos, presupuestación, desarrollo y elaboración del informe.", correct: false },
+          { text: "Preparación, ejecución y post evento.", correct: false },
+          { text: "Planificación, recepción, ejecución y análisis final.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuáles son los espacios más comunes para celebrar un evento?:",
+        answers: [
+          { text: "Observatorios, auditorios y hoteles.", correct: false },
+          { text: "Palacios de congresos, instalaciones municipales y auditorios.", correct: false },
+          { text: "Salas, recintos feriales y exposiciones.", correct: false },
+          { text: "Palacios de congresos, recintos feriales y hoteles", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuáles son los factores que más condicionan la organización de un evento?:",
+        answers: [
+          { text: "Objetivos, presupuesto, aspectos logísticos y emplazamiento.", correct: true },
+          { text: "Presupuesto, materiales y recursos humanos.", correct: false },
+          { text: "Depende de si hablamos de actos empresariales o sociales.", correct: false },
+          { text: "Objetivos de marketing, cronograma, horarios y emplazamientos", correct: false }
+        ]
+      },
+      {
+        text: "¿En qué política de marketing se incluyen las relaciones públicas?:",
+        answers: [
+          { text: "Política de precio", correct: false },
+          { text: "Política de producto", correct: false },
+          { text: "Política de comunicación", correct: true },
+          { text: "Política de distribución", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes elementos es uno sobre los que la empresa puede actuar para definir su imagen corporativa?:",
+        answers: [
+          { text: "La percepción subjetiva que el público tiene sobre la empresa.", correct: false },
+          { text: "El logotipo y los elementos visuales que sustentan la identidad de la marca.", correct: true },
+          { text: "Las influencias externas que recibe el público fuera del control de la empresa.", correct: false },
+          { text: "La opinión de cada individuo sobre la reputación corporativa.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué componente interviene en la comunicación no verbal?:",
+        answers: [
+          { text: "Tono", correct: false },
+          { text: "Postura", correct: true },
+          { text: "Voz", correct: false },
+          { text: "Dirección", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué documento emplea un formato similar a la carta para realizar una invitación, estableciendo un compromiso entre las partes?:",
+        answers: [
+          { text: "Agradecimientos", correct: false },
+          { text: "Nota protocolar", correct: true },
+          { text: "Felicitación", correct: false },
+          { text: "Esquela", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué elementos se instalan dentro de un recinto ferial?",
+        answers: [
+          { text: "Medios técnicos, informáticos y materiales.", correct: false },
+          { text: "Escenarios, expositores y conjuntos desmontables.", correct: false },
+          { text: "Stands y expositores.", correct: true },
+          { text: "Casetas y auditorios", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué es una feria?:",
+        answers: [
+          { text: "Un acontecimiento que reúne a un grupo de personas que ofrecen su punto de vista para generar un debate.", correct: false },
+          { text: "Un acontecimiento con una pretensión eminentemente comercial.", correct: true },
+          { text: "Una convocatoria que reúne a los principales accionistas de la empresa.", correct: false },
+          { text: "Un acto para reforzar las relaciones entre los trabajadores de una empresa.", correct: false }
+        ]
+      },
+      {
+        text: "¿En qué formatos se presenta la documentación del protocolo?:",
+        answers: [
+          { text: "Escritos y resumidos.", correct: false },
+          { text: "Formales y audiovisuales", correct: false },
+          { text: "Orales y visuales.", correct: false },
+          { text: "Escritos y audiovisuales.", correct: true }
+        ]
+      },
+      {
+        text: "¿Qué tipo de negociación trata de encontrar la mejor solución para ambas partes?:",
+        answers: [
+          { text: "Neutral", correct: false },
+          { text: "Colaborativa", correct: true },
+          { text: "Evitativa", correct: false },
+          { text: "Competitiva", correct: false }
+        ]
+      },
+      {
+        text: "Al finalizar un evento, ¿qué tareas se realizan?:",
+        answers: [
+          { text: "La realización y custodia de documentación interna y externa del evento", correct: false },
+          { text: "El briefing y la planificación del espacio", correct: false },
+          { text: "La planificación y el planteamiento de objetivos y estrategias", correct: false },
+          { text: "El análisis de resultados y la elaboración del informe", correct: true }
+        ]
+      },
+      {
+        text: "La documentación que se genera como consecuencia de la organización de un evento:",
+        answers: [
+          { text: "Se recomienda almacenarla por si sirviese como soporte para posteriores actos.", correct: true },
+          { text: "Carece de validez para justificar las labores realizadas.", correct: false },
+          { text: "Se archiva mediante un método fijo.", correct: false },
+          { text: "Ninguna es correcta", correct: false }
+        ]
+      },
+      {
+        text: "Con respecto a la imagen de marca:",
+        answers: [
+          { text: "Son actitudes que se determinan de forma objetiva.", correct: false },
+          { text: "Sostenida en el tiempo se convierte en reputación corporativa.", correct: true },
+          { text: "Es una concepción que la empresa tiene en mente sobre el público.", correct: false },
+          { text: "Todas son correctas.", correct: false }
+        ]
+      },
+      {
+        text: "Con respecto a los gabinetes de crisis:",
+        answers: [
+          { text: "Se ciñen a un manual estratégico estándar.", correct: false },
+          { text: "Compensan la pérdida de confianza del público con acciones comerciales.", correct: false },
+          { text: "Logran mensajes homogéneos, meditados y orientados a minimizar los efectos de las crisis.", correct: true },
+          { text: "Ninguna es correcta.", correct: false }
+        ]
+      },
+      {
+        text: "De estos cuatro actos, ¿cuál corresponde a un acto social?:",
+        answers: [
+          { text: "Aniversario", correct: true },
+          { text: "Simposio", correct: false },
+          { text: "Charla", correct: false },
+          { text: "Seminario", correct: false }
+        ]
+      },
+      {
+        text: "En la fase de supervisión, seguimiento y control de un evento, la supervisión se realiza para guiar e inspeccionar las actividades. ¿Cuáles son las dos clases de supervisión que existen?:",
+        answers: [
+          { text: "Superior e inferior", correct: false },
+          { text: "Interna y triangular", correct: false },
+          { text: "Abierta y cerrada", correct: true },
+          { text: "Progresiva y circular.", correct: false }
+        ]
+      },
+      {
+        text: "De los siguientes símbolos, ¿cuál es el único que puede que no esté legislado?:",
+        answers: [
+          { text: "El himno", correct: true },
+          { text: "Las instituciones", correct: false },
+          { text: "La bandera", correct: false },
+          { text: "El escudo", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes tipos de comunicación se centra en transmitir mensajes que generan efectos directos en la sociedad o en un colectivo amplio?:",
+        answers: [
+          { text: "La comunicación social", correct: true },
+          { text: "La comunicación institucional.", correct: false },
+          { text: "La comunicación económica.", correct: false },
+          { text: "La comunicación externa.", correct: false }
+        ]
+      },
+      {
+        text: "El personal branding implica:",
+        answers: [
+          { text: "Reconocer a una persona como un producto que debe ser desarrollado.", correct: false },
+          { text: "Realizar un análisis DAFO personal", correct: false },
+          { text: "Seleccionar los canales en los que exponer la marca personal", correct: false },
+          { text: "Todas son correctas.", correct: true }
+        ]
+      },
+      {
+        text: "En el montaje de stands, ¿cuál de los siguientes servicios es más completo?:",
+        answers: [
+          { text: "Stand llave en mano", correct: true },
+          { text: "Mixto", correct: false },
+          { text: "Sobre plano", correct: false },
+          { text: "Completo", correct: false }
+        ]
+      },
+      {
+        text: "En el sistema de ordenación de la mesa inglesa, ¿quién se sienta en las cabeceras de la mesa?:",
+        answers: [
+          { text: "Los invitados de honor", correct: false },
+          { text: "El primer invitado en llegar", correct: false },
+          { text: "El invitado de mayor rango", correct: false },
+          { text: "Los anfitriones", correct: true }
+        ]
+      },
+      {
+        text: "En la presidencia francesa:",
+        answers: [
+          { text: "Los anfitriones se ubican en los extremos de la mesa.", correct: false },
+          { text: "Los anfitriones se ubican en la zona central.", correct: true },
+          { text: "Los anfitriones se ubican frente a los invitados de honor.", correct: false },
+          { text: "Ninguna es correcta.", correct: false }
+        ]
+      },
+      {
+        text: "Hace referencia a la aportación económica o de otro tipo que una empresa realiza, habitualmente en el ámbito deportivo o cultural, a cambio de promoción o publicidad:",
+        answers: [
+          { text: "Mecenazgo", correct: false },
+          { text: "Patrocinio", correct: true },
+          { text: "Captación de fondos", correct: false },
+          { text: "Apoyo a iniciativas", correct: false }
+        ]
+      },
+      {
+        text: "La comunicación en el evento puede ser:",
+        answers: [
+          { text: "Activa, reactiva y proactiva.", correct: false },
+          { text: "Indoor, outdoor y mixta.", correct: false },
+          { text: "Put, pull y plush.", correct: false },
+          { text: "Pull, push e interactiva", correct: true }
+        ]
+      },
+      {
+        text: "La estrategia global de comunicación de la empresa se recoge en un documento conocido como:",
+        answers: [
+          { text: "Plan de estrategia above the line.", correct: false },
+          { text: "Programa General de RR. PP y organización de eventos.", correct: false },
+          { text: "Plan Estratégico de Comunicación Integral.", correct: true },
+          { text: "Plan de Comunicación General y Estrategias de RR. PP.", correct: false }
+        ]
+      },
+      {
+        text: "La memoria económica de un evento contiene:",
+        answers: [
+          { text: "Datos identificativos", correct: false },
+          { text: "Análisis de los gastos", correct: false },
+          { text: "Firma y sello", correct: false },
+          { text: "Todas son correctas", correct: true }
+        ]
+      },
+      {
+        text: "La ordenación protocolaria:",
+        answers: [
+          { text: "Se define por el rango, categoría o rol de los asistentes.", correct: false },
+          { text: "Viene establecida en una norma concreta.", correct: false },
+          { text: "Se compone de una serie de reglas que permiten su aplicación.", correct: false },
+          { text: "Todas son correctas.", correct: true }
+        ]
+      },
+      {
+        text: "La regla de la derecha afirma que:",
+        answers: [
+          { text: "La tercera persona de mayor importancia en el evento se sitúa a la derecha del centro métrico o anfitrión.", correct: false },
+          { text: "Se aplica una jerarquía que da preferencia a unas personas sobre otras en la ocupación de los lugares de la derecha.", correct: false },
+          { text: "Si el número de invitados es par, la posición de honor será la contigua a la derecha.", correct: false },
+          { text: "La posición de honor se encuentra a la derecha del anfitrión o centro métrico.", correct: true }
+        ]
+      },
+      {
+        text: "La tarjeta de invitación:",
+        answers: [
+          { text: "Se hace llegar a los invitados al menos 7 días hábiles antes de la celebración del evento.", correct: false },
+          { text: "Se hace llegar a las autoridades del Estado con un mínimo de 30 días de margen.", correct: true },
+          { text: "Utiliza un papel estándar de máxima finura.", correct: false },
+          { text: "Ninguna es correcta.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes no es una característica del liderazgo democrático?:",
+        answers: [
+          { text: "Ausencia de una dirección definida.", correct: true },
+          { text: "Fomenta la participación y trata de inspirar.", correct: false },
+          { text: "Orienta al equipo y colabora con él.", correct: false },
+          { text: "Consecución de compromiso, motivación y creatividad.", correct: false }
+        ]
+      },
+      {
+        text: "Las certificaciones más habituales en la gestión de eventos son:",
+        answers: [
+          { text: "ISO 9001, ISO 14001 e ISO 20121.", correct: true },
+          { text: "AENOR 2012 e ISO 10001.", correct: false },
+          { text: "ISO 12000, ISO 14000 e ISO 2022.", correct: false },
+          { text: "Ninguna es correcta.", correct: false }
+        ]
+      },
+      {
+        text: "Los hoteles se clasifican en categorías designadas por…",
+        answers: [
+          { text: "Oro", correct: false },
+          { text: "Estrellas", correct: true },
+          { text: "Tenedores", correct: false },
+          { text: "Plata", correct: false }
+        ]
+      },
+      {
+        text: "Qué es la señalética?:",
+        answers: [
+          { text: "Combinación de símbolos y señales que orientan a las personas que se mueven por el recinto del evento.", correct: true },
+          { text: "Señales estandarizadas de uso regulado y homologado, iguales para cualquier evento.", correct: false },
+          { text: "Línea estética y distribución de los espacios interiores.", correct: false },
+          { text: "Delimitación del espacio con paredes u otras estructuras que puedan generar zonas independientes", correct: false }
+        ]
+      },
+      {
+        text: "Son talleres que se celebran en el lugar de trabajo o fuera de él, con el objetivo de desarrollar nuevas habilidades o conocimientos al mismo tiempo que se estimula el trabajo en equipo:",
+        answers: [
+          { text: "Celebraciones", correct: false },
+          { text: "Teambuilding", correct: false },
+          { text: "Workshops", correct: true },
+          { text: "Aniversarios", correct: false }
+        ]
+      }
+    ];
+
+    // ============================
+    // LÓGICA DEL TEST
+    // ============================
+    const questionsContainer = document.getElementById("questionsContainer");
+    const checkBtn = document.getElementById("checkBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsBox = document.getElementById("results");
+    const scoreText = document.getElementById("scoreText");
+    const detailText = document.getElementById("detailText");
+
+    let quizState = [];
+
+    function shuffleArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function buildQuiz() {
+      questionsContainer.innerHTML = "";
+      resultsBox.style.display = "none";
+      checkBtn.disabled = false;
+
+      quizState = questionsData.map((q, index) => {
+        const shuffledAnswers = shuffleArray([...q.answers]);
+        const questionId = "q" + index;
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.questionId = questionId;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const num = document.createElement("div");
+        num.className = "question-number";
+        num.textContent = "Pregunta " + (index + 1);
+
+        const text = document.createElement("div");
+        text.className = "question-text";
+        text.textContent = q.text;
+
+        header.appendChild(num);
+        header.appendChild(text);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        shuffledAnswers.forEach((ans, ansIndex) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = questionId;
+          input.value = ansIndex;
+          input.dataset.correct = ans.correct ? "true" : "false";
+
+          const span = document.createElement("span");
+          span.className = "answer-text";
+          span.textContent = ans.text;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          answersDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(answersDiv);
+        questionsContainer.appendChild(card);
+
+        return {
+          questionId,
+          element: card
+        };
+      });
+    }
+
+    function gradeQuiz() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      quizState.forEach((q) => {
+        const card = q.element;
+        const options = card.querySelectorAll(".answer-option");
+        let selectedInput = null;
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          opt.classList.remove("correct", "incorrect", "unselected-correct");
+          if (input.checked) selectedInput = input;
+        });
+
+        if (!selectedInput) {
+          unanswered++;
+        } else if (selectedInput.dataset.correct === "true") {
+          correctCount++;
+        }
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          input.disabled = true;
+
+          if (input.dataset.correct === "true" && input.checked) {
+            opt.classList.add("correct");
+          } else if (input.dataset.correct === "false" && input.checked) {
+            opt.classList.add("incorrect");
+          } else if (input.dataset.correct === "true" && !input.checked) {
+            opt.classList.add("unselected-correct");
+          }
+        });
+      });
+
+      const total = questionsData.length;
+      const percentage = (correctCount / total) * 100;
+
+      let gradeClass = "bad";
+      if (percentage >= 80) gradeClass = "good";
+      else if (percentage >= 50) gradeClass = "medium";
+
+      scoreText.className = "score " + gradeClass;
+      scoreText.textContent = `Resultado: ${correctCount} de ${total} (${percentage.toFixed(1)}%)`;
+
+      let detail = "";
+      if (unanswered > 0) {
+        detail += `Preguntas sin responder: ${unanswered}. `;
+      }
+      if (percentage >= 80) {
+        detail += "Muy buen trabajo, dominas el tema ✅";
+      } else if (percentage >= 50) {
+        detail += "Nada mal, pero puedes repasar algunos conceptos 👍";
+      } else {
+        detail += "Te conviene repasar el contenido antes del examen 📚";
+      }
+
+      detailText.textContent = detail;
+      resultsBox.style.display = "flex";
+      checkBtn.disabled = true;
+    }
+
+    checkBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", buildQuiz);
+
+    buildQuiz();
+  </script>
+</body>
+</html>

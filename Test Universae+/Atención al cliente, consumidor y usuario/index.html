@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Atención al Cliente, Consumidor y usuario</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+  body {
+  background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+}
+
+
+
+   .app {
+  max-width: 900px;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.85),
+    rgba(245,245,245,0.8)
+  );
+  border-radius: 20px;
+  padding: 1.7rem 2rem;
+  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+ button {
+  border: none;
+  border-radius: 12px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+}
+
+button.primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
+button.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+button.secondary:hover {
+  transform: scale(1.05);
+  background: #d1d5db;
+}
+
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .question-card {
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-number {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #6b7280;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s, transform 0.05s;
+      cursor: pointer;
+    }
+
+    .answer-option:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .answer-option input {
+      margin-top: 0.15rem;
+      cursor: pointer;
+    }
+
+    .answer-text {
+      font-size: 0.9rem;
+    }
+
+    /* Estados tras corregir */
+    .answer-option.correct {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+    }
+
+    .answer-option.incorrect {
+      background: #fee2e2;
+      border: 1px solid #dc2626;
+    }
+
+    .answer-option.unselected-correct {
+      background: #ecfdf5;
+      border: 1px dashed #16a34a;
+    }
+
+    .results {
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .score {
+      font-weight: 600;
+    }
+
+    .score.good {
+      color: #16a34a;
+    }
+
+    .score.medium {
+      color: #f59e0b;
+    }
+
+    .score.bad {
+      color: #dc2626;
+    }
+
+    .info-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 1rem;
+        border-radius: 0.75rem;
+      }
+
+      .question-card {
+        padding: 0.8rem 0.75rem;
+      }
+    }
+    body {
+  margin: 0;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+
+  /* ⭐ Fondo con imagen (pon aquí tu archivo) */
+  /* ⭐ Capa blanca semitransparente encima */
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  /* Ajusta opacidad según gusto: 0.30 = más visible, 0.80 = más blanco */
+  background: rgba(255, 255, 255, 0.70);
+
+  /* Difumina suavemente el fondo (opcional pero elegante) */
+  backdrop-filter: blur(2px);
+
+  z-index: -1;
+}
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Test Atención al Cliente</h1>
+   <!-- <p class="subtitle">
+  Plantilla editable · Respuestas aleatorias · Corrección automática
+</p> -->
+
+
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+    </div>
+
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
+
+   <!--
+<p class="info-text">
+  Para crear nuevos tests, solo edita el array <strong>questions</strong> en el código.
+</p>
+-->
+
+  </div>
+
+  <script>
+    // ============================
+    // 1. EDITA AQUÍ TUS PREGUNTAS
+    // ============================
+    // Para añadir más: copia un bloque { text: "...", answers: [...] } y ajusta el contenido.
+    const questionsData = [
+      {
+        text: "¿Cuál de las siguientes frases refleja una comunicación positiva de cara al cliente?",
+        answers: [
+          { text: "En este momento es imposible atender su solicitud", correct: false },
+          { text: "Usted tiene que elegir esta opción", correct: false },
+          { text: "Será un placer atender su solicitud en cuanto estemos en disposición de ello.", correct: true },
+          { text: "No se admite ningún tipo de devolución sin el tique de compra.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes no es una directriz que regula la comunicación verbal?",
+        answers: [
+          { text: "Formalidad.", correct: false },
+          { text: "Positividad.", correct: false },
+          { text: "Ubicuidad.", correct: true },
+          { text: "Corrección gramatical.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes no es una queja o reclamación frecuente en la fase posterior a la adquisición del bien o servicio?",
+        answers: [
+          { text: "Mala conservación del producto.", correct: false },
+          { text: "Instrucciones erróneas, confusas o incompletas.", correct: false },
+          { text: "Defectos de fábrica.", correct: false },
+          { text: "Ausencia de información relativa al producto.", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes no es una técnica cuantitativa para el control del rendimiento del departamento?",
+        answers: [
+          { text: "Tasa Comparativa de Trámites Resueltos por el Agente.", correct: true },
+          { text: "Tasa de Variación de Trámites.", correct: false },
+          { text: "Tasa de Variación del Tiempo de Atención.", correct: false },
+          { text: "Tasa de Eficacia en el Servicio.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es el primer paso a la hora de establecer un plan de calidad?",
+        answers: [
+          { text: "Medición del desempeño", correct: false },
+          { text: "Disposición de los recursos materiales y humanos necesarios", correct: false },
+          { text: "Programación de actuaciones", correct: false },
+          { text: "Fijación de los objetivos", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuándo hablamos de silencio administrativo?",
+        answers: [
+          { text: "Cuando una administración deja sin resolver una solicitud presentada adecuadamente a pesar de estar obligada a ello.", correct: true },
+          { text: "Cuando se alcanza una solución equitativa, asumible y acorde a la situación del cliente.", correct: false },
+          { text: "Cuando se resuelve administrativamente la problemática y se da por cerrada de manera definitiva.", correct: false },
+          { text: "Cuando el cliente muestra su malestar en el proceso de venta o en el servicio postventa.", correct: false }
+        ]
+      },
+      {
+        text: "¿En cuál de las siguientes opciones el cliente requiere una actuación que ponga remedio a su malestar?",
+        answers: [
+          { text: "En una queja", correct: false },
+          { text: "En una reclamación", correct: true },
+          { text: "En un escrito.", correct: false },
+          { text: "En una invitación", correct: false }
+        ]
+      },
+      {
+        text: "¿En qué consiste la fórmula AIDA?",
+        answers: [
+          { text: "En atraer al receptor para que compre un producto varias veces.", correct: false },
+          { text: "En ayudar al cliente, indicarle soluciones y agradecerle su atención.", correct: false },
+          { text: "En captar la atención, crear interés, provocar deseo y estimular la acción del receptor.", correct: true },
+          { text: "En variar la comunicación con el receptor para elegir la técnica que mejor se adapte a él.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué entendemos por escucha activa?",
+        answers: [
+          { text: "La capacidad orientada a hacer sentir al cliente que se reciben y entienden sus demandas y que se atiende a sus sentimientos y emociones.", correct: true },
+          { text: "La habilidad para transmitir creencias o sentimientos de manera sosegada, constructiva y transparente.", correct: false },
+          { text: "La capacidad dirigida a comprender los sentimientos y emociones de los demás para ponerse en su lugar y compartir su estado.", correct: false },
+          { text: "La capacidad para inspirar o motivar al cliente.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué miden los KPI (Key Performance Indicator)?",
+        answers: [
+          { text: "El grado de consecución de una meta, en este caso, la satisfacción del cliente.", correct: true },
+          { text: "El número de reclamaciones que recibe una empresa en un año.", correct: false },
+          { text: "La cantidad de trabajadores del departamento de Atención al Cliente de una empresa", correct: false },
+          { text: "No son herramientas medidoras.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué organigrama de empresa refleja mejor la jerarquía de responsabilidades a la hora de tomar decisiones?",
+        answers: [
+          { text: "Organigrama Lineal", correct: false },
+          { text: "Organigrama Piramidal", correct: true },
+          { text: "Organigrama Circular", correct: false },
+          { text: "Organigrama Matricial", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué técnica de negociación se considera más recomendable?",
+        answers: [
+          { text: "Táctica de confrontación", correct: false },
+          { text: "Táctica coercitiva", correct: false },
+          { text: "Táctica estática", correct: false },
+          { text: "Táctica de concesiones estrictas", correct: true }
+        ]
+      },
+      {
+        text: "¿Qué ventas especiales se contemplan en la LOCM?",
+        answers: [
+          { text: "Venta a distancia, venta automática, venta pública en subasta y franquicias.", correct: true },
+          { text: "Venta de saldos, ventas en liquidación, ventas con prima y ventas con obsequio.", correct: false },
+          { text: "Venta presencial, venta online, venta en subasta y venta internacional.", correct: false },
+          { text: "Venta virtual, venta asistida, leasing y franquicias.", correct: false }
+        ]
+      },
+      {
+        text: "Con respecto a la apariencia del agente:",
+        answers: [
+          { text: "Se admitirá algún complemento siempre que no moleste a la hora de gesticular.", correct: true },
+          { text: "Se recomiendan las prendas llamativas y vistosas.", correct: false },
+          { text: "Se debe ir bien perfumado para impactar al cliente con el aroma.", correct: false },
+          { text: "El cabello largo irá suelto y natural, para transmitir personalidad.", correct: false }
+        ]
+      },
+      {
+        text: "Con respecto a las técnicas de control, los auditores:",
+        answers: [
+          { text: "Controlan a los agentes.", correct: true },
+          { text: "Hacen propuestas vinculantes.", correct: false },
+          { text: "Aplican las medidas correctoras.", correct: false },
+          { text: "Tienen las mismas funciones que los directivos", correct: false }
+        ]
+      },
+      {
+        text: "Con respecto al sistema de clasificación de documentos del DAC:",
+        answers: [
+          { text: "Su elección es fruto de la aplicación de criterios de eficacia y eficiencia.", correct: true },
+          { text: "No requiere una planificación previa, sino una actuación inmediata.", correct: false },
+          { text: "Se mantendrá durante un periodo de tiempo limitado.", correct: false },
+          { text: "Solo podrá hacerse esta clasificación en formato digital", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes no es una sección común en los Planes de atención al cliente?",
+        answers: [
+          { text: "Contextualización de la labor del SAC", correct: false },
+          { text: "Organización interna del SAC", correct: false },
+          { text: "Organización externa del SAC", correct: true },
+          { text: "Determinación de las actividades de los agentes", correct: false }
+        ]
+      },
+      {
+        text: "Cuando se vende un producto defectuoso a un precio menor al de mercado, se trata de una:",
+        answers: [
+          { text: "Venta en rebajas", correct: false },
+          { text: "Venta de promoción", correct: false },
+          { text: "Venta de saldos", correct: true },
+          { text: "Venta con prima", correct: false }
+        ]
+      },
+      {
+        text: "Dentro del proceso interno de gestión de quejas y reclamaciones, la valoración preliminar evalúa:",
+        answers: [
+          { text: "La importancia del cliente y la peligrosidad y dificultad de la queja.", correct: true },
+          { text: "Los hechos, el contexto y los clientes y productos implicados.", correct: false },
+          { text: "El expediente del cliente y los canales utilizados.", correct: false },
+          { text: "Los datos del reclamante, la instancia de solución de agravio y los documentos adjuntos.", correct: false }
+        ]
+      },
+      {
+        text: "Desde comienzos del siglo XX, la figura del cliente, consumidor y usuario ha ido cobrando cada vez más relevancia debido a:",
+        answers: [
+          { text: "Los cambios en la actitud ante la compra.", correct: false },
+          { text: "La reducción del número de empresas.", correct: false },
+          { text: "El aumento constante de la oferta de bienes y servicios.", correct: true },
+          { text: "La creación de los servicios de atención al cliente en las empresas.", correct: false }
+        ]
+      },
+      {
+        text: "El arbitraje se desarrolla a través de:",
+        answers: [
+          { text: "Las Alternative Dispute Resolution.", correct: false },
+          { text: "Las instancias generales y los recursos.", correct: false },
+          { text: "Las juntas arbitrales de consumo y los órganos arbitrales.", correct: true },
+          { text: "Los árbitros colegiados y los administradores colegiales.", correct: false }
+        ]
+      },
+      {
+        text: "El data mining y el CMR se utilizan para:",
+        answers: [
+          { text: "Incrementar la calidad de la toma de decisiones de la organización.", correct: false },
+          { text: "almacenar y conservar documentos", correct: false },
+          { text: "facilitar el acceso a los documentos a cualquier miembro del equipo", correct: false },
+          { text: "recoger y analizar datos relativos a los clientes y generar tendencias, patrones y resultados significativos para la empresa.", correct: true }
+        ]
+      },
+      {
+        text: "El marketing relacional promueve la adopción de una actitud ______________ con el cliente.",
+        answers: [
+          { text: "Negativa", correct: false },
+          { text: "Reactiva", correct: false },
+          { text: "Proactiva", correct: true },
+          { text: "Compasiva", correct: false }
+        ]
+      },
+      {
+        text: "El organismo que otorga a las entidades externas el permiso para actuar como certificadoras es:",
+        answers: [
+          { text: "La Organización ISO.", correct: false },
+          { text: "SERVQUAL.", correct: false },
+          { text: "La Entidad Nacional de Acreditación.", correct: true },
+          { text: "La Asociación Nacional de Entidades Certificadoras y Acreditadoras.", correct: false }
+        ]
+      },
+      {
+        text: "El procedimiento que consiste en recurrir a fórmulas como el arbitraje o la mediación cuando internamente no se logra una gestión exitosa de la queja o reclamación se denomina:",
+        answers: [
+          { text: "Resolución informal interna", correct: false },
+          { text: "Resolución formal interna", correct: false },
+          { text: "Resolución formal externa", correct: true },
+          { text: "Resolución formal judicial", correct: false }
+        ]
+      },
+      {
+        text: "En el SAC se recomienda que la comunicación sea:",
+        answers: [
+          { text: "Colectiva, extraoficial e informal", correct: false },
+          { text: "Individual, oficial y formal", correct: true },
+          { text: "Individual, informal y cooficial", correct: false },
+          { text: "Individual, extraoficial y formal.", correct: false }
+        ]
+      },
+      {
+        text: "En función de cómo ejerzan sus labores, los agentes pueden ser:",
+        answers: [
+          { text: "Operadores, teleoperadores, gestores y front office.", correct: true },
+          { text: "Encuestadores, coordinadores, filtro y auditores.", correct: false },
+          { text: "De contacto, de supervisión, de resolución y de atención.", correct: false },
+          { text: "Front office, back office, complementarios y administrativos.", correct: false }
+        ]
+      },
+      {
+        text: "En una base de datos Relacional:",
+        answers: [
+          { text: "Los campos están incluidos en el propio archivo, conformando una única tabla de registros y campos.", correct: false },
+          { text: "Se aglutinan, organizan y sincronizan datos provenientes de campos de varios archivos o bases de datos.", correct: true },
+          { text: "Permite añadir dos o más datos en un mismo campo.", correct: false },
+          { text: "Únicamente recopila y organiza los datos, de forma que facilite su visualización.", correct: false }
+        ]
+      },
+      {
+        text: "La comunicación empresarial externa se produce con:",
+        answers: [
+          { text: "Los stakeholders internos y externos.", correct: true },
+          { text: "Los clientes, consumidores y usuarios.", correct: false },
+          { text: "El público objetivo que haya definido la empresa.", correct: false },
+          { text: "Las administraciones públicas y agentes sociales.", correct: false }
+        ]
+      },
+      {
+        text: "La comunicación interna es diagonal cuando:",
+        answers: [
+          { text: "Se produce entre unidades del mismo escalafón del organigrama de la empresa, independientemente de si están en la misma área funcional o no.", correct: false },
+          { text: "Va de los rangos inferiores hacia los superiores dentro de la misma área funcional.", correct: false },
+          { text: "Permite el flujo de información entre rangos y áreas diferentes, pudiendo ser ascendente o descendente.", correct: true },
+          { text: "Va de los rangos superiores hacia los inferiores dentro de la misma área funcional.", correct: false }
+        ]
+      },
+      {
+        text: "La definición de las actuaciones de los agentes tiene como objetivo:",
+        answers: [
+          { text: "Dejar un margen amplio para la improvisación de los agentes.", correct: false },
+          { text: "Ofrecer unas directrices claras al responsable del SAC.", correct: false },
+          { text: "Acercarse al cumplimiento íntegro de lo planificado.", correct: true },
+          { text: "Evitar las llamadas telefónicas", correct: false }
+        ]
+      },
+      {
+        text: "La ficha de cliente puede adquirir dos formatos:",
+        answers: [
+          { text: "Ficha de archivo o ficha de registro.", correct: false },
+          { text: "Ficha abierta o ficha acotada.", correct: false },
+          { text: "Ficha resumida o ficha completa.", correct: true },
+          { text: "Ficha económica o ficha identificativa.", correct: false }
+        ]
+      },
+      {
+        text: "La identidad corporativa:",
+        answers: [
+          { text: "Es la propuesta, el valor, la personalidad que caracteriza y diferencia a la empresa.", correct: false },
+          { text: "Es una idea mental que el consumidor se construye sobre la empresa.", correct: false },
+          { text: "Son los elementos que representan de forma visual y material a la empresa.", correct: true },
+          { text: "Está vinculada a una correcta aplicación del marketing relacional.", correct: false }
+        ]
+      },
+      {
+        text: "La inversión en I+D se trata de un:",
+        answers: [
+          { text: "Factor interno de la empresa, puesto que la empresa es responsable de buscar nuevos procesos que optimicen el tiempo y los recursos.", correct: true },
+          { text: "Es un factor externo, porque depende del desarrollo tecnológico de los últimos años.", correct: false },
+          { text: "Es un factor intermedio, ya que depende de los directivos y los clientes", correct: false },
+          { text: "Es un factor interno, ya que la empresa tiene un control mínimo o nulo sobre esta.", correct: false }
+        ]
+      },
+      {
+        text: "La LOCM sanciona las infracciones graves con una cuantía de:",
+        answers: [
+          { text: "Hasta 6.000€", correct: false },
+          { text: "Entre 6.000 y 30.000€", correct: true },
+          { text: "Entre 30.000 y 900.000€", correct: false },
+          { text: "Superior a 600.000€", correct: false }
+        ]
+      },
+      {
+        text: "Los clientes potenciales son aquellos que:",
+        answers: [
+          { text: "Han adquirido el bien o servicio de la empresa al menos una vez", correct: false },
+          { text: "Ya tienen una opinión formada con respecto a la compra antes de contactar con la empresa.", correct: false },
+          { text: "Hacen uso del bien o servicio con intención de obtener rentabilidad en una actividad económica posterior", correct: false },
+          { text: "No han adquirido el bien o disfrutado del servicio, pero están en condiciones de hacerlo a corto plazo.", correct: true }
+        ]
+      },
+      {
+        text: "Los contact centers:",
+        answers: [
+          { text: "Son una modalidad de subcontratación que ofrece menor eficiencia a corto plazo.", correct: false },
+          { text: "Obligan a la empresa a formar a los profesionales que los componen.", correct: false },
+          { text: "Requieren un acuerdo de contratación claro en cuanto a los términos en los que se prestará el servicio.", correct: true },
+          { text: "Contactan con los empleados para ver cómo se sienten", correct: false }
+        ]
+      },
+      {
+        text: "Los mecanismos que permiten a los ciudadanos relacionarse con las administraciones son:",
+        answers: [
+          { text: "Los actos administrativos.", correct: false },
+          { text: "Las denuncias, las instancias generales y los recursos administrativos.", correct: true },
+          { text: "El derecho de petición, recogido en el artículo 29 de la Constitución.", correct: false },
+          { text: "Los recogidos en la Ley 11/2011, de 20 de mayo, de regulación institucional en la Administración General del Estado.", correct: false }
+        ]
+      },
+      {
+        text: "Una persona física que se hace con determinados bienes o servicios para hacer un uso personal de los mismos, sin ninguna pretensión de incorporarlos a posteriores actividades lucrativas es:",
+        answers: [
+          { text: "Un cliente", correct: false },
+          { text: "Un consumidor", correct: true },
+          { text: "Un usuario", correct: false },
+          { text: "Comprador", correct: false }
+        ]
+      },
+      {
+        text: "Uno de los aspectos destacados que se recogen en el contenido de la LOPD es:",
+        answers: [
+          { text: "La exactitud de los datos.", correct: true },
+          { text: "La solución de conflictos.", correct: false },
+          { text: "El deber de compatibilidad.", correct: false },
+          { text: "La autorización para la divulgación de los datos recopilados.", correct: false }
+        ]
+      }
+    ];
+
+    // =====================================
+    // 2. LÓGICA DEL TEST (NO TOCAR SI NO HACE FALTA)
+    // =====================================
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const checkBtn = document.getElementById("checkBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsBox = document.getElementById("results");
+    const scoreText = document.getElementById("scoreText");
+    const detailText = document.getElementById("detailText");
+
+    let quizState = [];
+
+    function shuffleArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function buildQuiz() {
+      questionsContainer.innerHTML = "";
+      resultsBox.style.display = "none";
+      checkBtn.disabled = false;
+
+      quizState = questionsData.map((q, index) => {
+        const shuffledAnswers = shuffleArray([...q.answers]);
+        const questionId = "q" + index;
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.questionId = questionId;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const num = document.createElement("div");
+        num.className = "question-number";
+        num.textContent = "Pregunta " + (index + 1);
+
+        const text = document.createElement("div");
+        text.className = "question-text";
+        text.textContent = q.text;
+
+        header.appendChild(num);
+        header.appendChild(text);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        shuffledAnswers.forEach((ans, ansIndex) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = questionId;
+          input.value = ansIndex;
+          input.dataset.correct = ans.correct ? "true" : "false";
+
+          const span = document.createElement("span");
+          span.className = "answer-text";
+          span.textContent = ans.text;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          answersDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(answersDiv);
+        questionsContainer.appendChild(card);
+
+        return {
+          questionId,
+          element: card
+        };
+      });
+    }
+
+    function gradeQuiz() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      quizState.forEach((q) => {
+        const card = q.element;
+        const options = card.querySelectorAll(".answer-option");
+        let selectedInput = null;
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          opt.classList.remove("correct", "incorrect", "unselected-correct");
+          if (input.checked) selectedInput = input;
+        });
+
+        if (!selectedInput) {
+          unanswered++;
+        } else if (selectedInput.dataset.correct === "true") {
+          correctCount++;
+        }
+
+        // Marcar visualmente correctas / incorrectas
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          input.disabled = true;
+
+          if (input.dataset.correct === "true" && input.checked) {
+            opt.classList.add("correct");
+          } else if (input.dataset.correct === "false" && input.checked) {
+            opt.classList.add("incorrect");
+          } else if (input.dataset.correct === "true" && !input.checked) {
+            opt.classList.add("unselected-correct");
+          }
+        });
+      });
+
+      const total = questionsData.length;
+      const percentage = (correctCount / total) * 100;
+
+      let gradeClass = "bad";
+      if (percentage >= 80) gradeClass = "good";
+      else if (percentage >= 50) gradeClass = "medium";
+
+      scoreText.className = "score " + gradeClass;
+      scoreText.textContent = `Resultado: ${correctCount} de ${total} (${percentage.toFixed(1)}%)`;
+
+      let detail = "";
+      if (unanswered > 0) {
+        detail += `Preguntas sin responder: ${unanswered}. `;
+      }
+      if (percentage >= 80) {
+        detail += "Muy buen trabajo, dominas el tema ✅";
+      } else if (percentage >= 50) {
+        detail += "Nada mal, pero puedes repasar algunos conceptos 👍";
+      } else {
+        detail += "Te conviene repasar el contenido antes del examen 📚";
+      }
+
+      detailText.textContent = detail;
+      resultsBox.style.display = "flex";
+      checkBtn.disabled = true;
+    }
+
+    checkBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", buildQuiz);
+
+    // Construir el test al cargar
+    buildQuiz();
+  </script>
+</body>
+</html>
