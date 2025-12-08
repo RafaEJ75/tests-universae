@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Selector de Tests Universe+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #020617;
+      color: #f9fafb;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 1.5rem;
+      background: radial-gradient(circle at top, #4f46e5, #020617 55%);
+    }
+
+    .app {
+      max-width: 980px;
+      width: 100%;
+      background: radial-gradient(circle at top left, rgba(129, 140, 248, 0.12), transparent 55%),
+                  linear-gradient(to bottom right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
+      border-radius: 24px;
+      padding: 1.8rem 2rem 2.2rem;
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(129, 140, 248, 0.3), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.25), transparent 60%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.7rem;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+
+    .levels-tag {
+      font-size: 0.8rem;
+      color: #a5b4fc;
+    }
+
+    .grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.1rem;
+      margin-top: 0.75rem;
+    }
+
+    .card {
+      position: relative;
+      border-radius: 18px;
+      padding: 1rem 1rem 1rem;
+      background: radial-gradient(circle at top left, rgba(59,130,246,0.25), transparent 55%),
+                  linear-gradient(to bottom right, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow: 0 12px 25px rgba(15,23,42,0.8);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.95);
+      border-color: rgba(129,140,248,0.85);
+    }
+
+    .card:hover .card-glow {
+      opacity: 1;
+    }
+
+    .card-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0 0, rgba(129,140,248,0.3), transparent 60%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .card-tag {
+      font-size: 0.7rem;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .card-body {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      line-height: 1.4;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-top: 0.3rem;
+    }
+
+    .pill {
+      padding: 0.12rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.55);
+    }
+
+    .cta {
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .cta a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      text-decoration: none;
+      background: radial-gradient(circle at top left, #4f46e5, #2563eb);
+      color: #f9fafb;
+      border: 1px solid rgba(191,219,254,0.6);
+      box-shadow: 0 8px 15px rgba(37,99,235,0.65);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .cta a:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 11px 22px rgba(37,99,235,0.9);
+      background: radial-gradient(circle at top left, #6366f1, #2563eb);
+    }
+
+    .cta a span.icon {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 1.3rem 1.1rem 1.7rem;
+        border-radius: 18px;
+      }
+
+      h1 {
+        font-size: 1.35rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="title-block">
+        <h1>
+          Tests Universe+
+          <span class="badge">Modo práctica</span>
+        </h1>
+        <p class="subtitle">Elige la asignatura como si fuera un nivel de juego y practica antes del test oficial.</p>
+        <span class="levels-tag">5 niveles disponibles · todos con corrección automática</span>
+      </div>
+    </header>
+
+    <main class="grid">
+      <!-- TEST 1 -->
+      <article class="card" onclick="location.href='Atención al cliente, consumidor y usuario/';">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-title">Atención al cliente, consumidor y usuario</div>
+          <div class="card-tag">Nivel 1</div>
+        </div>
+        <div class="card-body">
+          Conceptos básicos de atención al cliente, tipos de clientes, calidad del servicio y comunicación.
+        </div>
+        <div class="card-meta">
+          <span class="pill">40 preguntas tipo test</span>
+          <span>Base para el resto</span>
+        </div>
+        <div class="cta">
+          <a href="Atención al cliente, consumidor y usuario/">
+            <span class="icon">▶</span>
+            <span>Empezar test</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- TEST 2 -->
+      <article class="card" onclick="location.href='Medios y soportes de comunicación/';">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-title">Medios y soportes de comunicación</div>
+          <div class="card-tag">Nivel 2</div>
+        </div>
+        <div class="card-body">
+          Medios tradicionales y online, formatos publicitarios, métricas de audiencia y planificación básica.
+        </div>
+        <div class="card-meta">
+          <span class="pill">40 preguntas</span>
+          <span>Ideal para repasar medios</span>
+        </div>
+        <div class="cta">
+          <a href="Medios y soportes de comunicación/">
+            <span class="icon">▶</span>
+            <span>Empezar test</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- TEST 3 -->
+      <article class="card" onclick="location.href='Relaciones públicas y organización de eventos/';">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-title">Relaciones públicas y organización de eventos</div>
+          <div class="card-tag">Nivel 3</div>
+        </div>
+        <div class="card-body">
+          Protocolo, tipos de eventos, gabinetes de crisis, imagen corporativa y documentación de actos.
+        </div>
+        <div class="card-meta">
+          <span class="pill">40 preguntas</span>
+          <span>Modo eventos / RRPP</span>
+        </div>
+        <div class="cta">
+          <a href="Relaciones públicas y organización de eventos/">
+            <span class="icon">▶</span>
+            <span>Empezar test</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- TEST 4 -->
+      <article class="card" onclick="location.href='Trabajo de campo en la investigación comercial/';">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-title">Trabajo de campo en la investigación comercial</div>
+          <div class="card-tag">Nivel 4</div>
+        </div>
+        <div class="card-body">
+          Muestreo, encuestas, cuestionarios, motivación, equipo de campo y análisis de datos.
+        </div>
+        <div class="card-meta">
+          <span class="pill">40 preguntas</span>
+          <span>Más técnico</span>
+        </div>
+        <div class="cta">
+          <a href="Trabajo de campo en la investigación comercial/">
+            <span class="icon">▶</span>
+            <span>Empezar test</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- TEST 5 -->
+      <article class="card" onclick="location.href='Diseño y elaboración de material de comunicación/';">
+        <div class="card-glow"></div>
+        <div class="card-header">
+          <div class="card-title">Diseño y elaboración de material de comunicación</div>
+          <div class="card-tag">Nivel 5</div>
+        </div>
+        <div class="card-body">
+          Diseño gráfico, Photoshop, maquetación, principios visuales, creatividad y piezas publicitarias.
+        </div>
+        <div class="card-meta">
+          <span class="pill">40 preguntas</span>
+          <span>Boss final de diseño 😈</span>
+        </div>
+        <div class="cta">
+          <a href="Diseño y elaboración de material de comunicación/">
+            <span class="icon">▶</span>
+            <span>Empezar test</span>
+          </a>
+        </div>
+      </article>
+    </main>
+  </div>
+</body>
+</html>
