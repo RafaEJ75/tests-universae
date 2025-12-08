@@ -7,120 +7,135 @@
 
   <style>
     /* ===== Reset ===== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     /* ===== Base ===== */
     body {
       font-family: "Inter", system-ui, sans-serif;
-      background: #0d1117;
+      background: radial-gradient(circle at top, #1c2532 0%, #0d1117 70%);
       color: #e6edf3;
-      padding: 40px 20px;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
+      padding: 40px 20px;
     }
 
     .container {
       width: 100%;
-      max-width: 900px;
-      animation: fadeIn 0.6s ease forwards;
+      max-width: 1000px;
+      animation: fadeIn 0.7s ease forwards;
     }
 
     header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 50px;
     }
 
     header h1 {
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       font-weight: 700;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.6px;
+      color: #f0f6fc;
+      text-shadow: 0 0 10px rgba(255,255,255,0.08);
     }
 
+    header p {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #9aa7b7;
+    }
+
+    /* ===== Grid ===== */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 10px;
     }
 
-    /* ===== Cards ===== */
+    /* ===== Card ===== */
     .card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      padding: 22px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 30px 20px;
       text-align: center;
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 0.2px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: all 0.25s ease;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
     }
 
     .card:hover {
-      background: #1c222b;
       border-color: #58a6ff;
-      transform: translateY(-4px);
-      box-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
+      transform: translateY(-6px);
+      box-shadow: 0 8px 28px rgba(88,166,255,0.18);
+      background: rgba(88, 166, 255, 0.05);
+    }
+
+    .icon {
+      font-size: 2.3rem;
+      margin-bottom: 12px;
+      opacity: 0.85;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      color: #f0f6fc;
     }
 
     /* ===== Animación ===== */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* ===== Mobile ===== */
     @media (max-width: 600px) {
-      header h1 {
-        font-size: 1.8rem;
-      }
-      .card {
-        padding: 18px;
-      }
+      header h1 { font-size: 2rem; }
+      .card { padding: 22px 18px; }
+      .icon { font-size: 2rem; }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-
     <header>
-      <h1>Tests Universae+</h1>
+      <h1>Tests Universae</h1>
+      <p>Selecciona una asignatura para comenzar</p>
     </header>
 
     <main class="grid">
 
-      <!-- Card 1 -->
       <div class="card" onclick="location.href='tests/atencion-cliente/index.html'">
-        Atención al Cliente
+        <div class="icon">📞</div>
+        <div class="card-title">Atención al Cliente</div>
       </div>
 
-      <!-- Card 2 -->
       <div class="card" onclick="location.href='tests/diseno-material-comunicacion/index.html'">
-        Diseño y Material de Comunicación
+        <div class="icon">🎨</div>
+        <div class="card-title">Diseño y Material de Comunicación</div>
       </div>
 
-      <!-- Card 3 -->
       <div class="card" onclick="location.href='tests/medios-soportes-comunicacion/index.html'">
-        Medios y Soportes de Comunicación
+        <div class="icon">📺</div>
+        <div class="card-title">Medios y Soportes de Comunicación</div>
       </div>
 
-      <!-- Card 4 -->
       <div class="card" onclick="location.href='tests/relaciones-publicas-eventos/index.html'">
-        Relaciones Públicas y Eventos
+        <div class="icon">🤝</div>
+        <div class="card-title">Relaciones Públicas y Eventos</div>
       </div>
 
-      <!-- Card 5 -->
       <div class="card" onclick="location.href='tests/trabajo-campo-investigacion/index.html'">
-        Trabajo de Campo e Investigación
+        <div class="icon">📊</div>
+        <div class="card-title">Trabajo de Campo e Investigación</div>
       </div>
 
     </main>
-
   </div>
 
 </body>
