@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tests Universae+</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    header h1 {
+      text-align: center;
+      font-size: 1.9rem;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+    }
+
+    header p {
+      text-align: center;
+      margin: 0 0 25px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 18px;
+      border: 1px solid #334155;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .card:hover {
+      background: #273449;
+      border-color: #475569;
+      transform: translateY(-3px);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f8fafc;
+    }
+
+    .card-desc {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      line-height: 1.4;
+    }
+
+    @media(max-width: 600px) {
+      header h1 {
+        font-size: 1.6rem;
+      }
+      .card {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Tests Universae+</h1>
+      <p>Selecciona una asignatura para practicar el test.</p>
+    </header>
+
+    <main class="grid">
+
+      <!-- TEST 1 -->
+      <div class="card" onclick="location.href='Test Universae+/Atención al cliente, consumidor y usuario/index.html';">
+        <div class="card-title">Atención al cliente, consumidor y usuario</div>
+        <div class="card-desc">Conceptos de servicio, comunicación, tipos de cliente y calidad.</div>
+      </div>
+
+      <!-- TEST 2 -->
+      <div class="card" onclick="location.href='Test Universae+/Diseño y elaboración de material de comunicación/index.html';">
+        <div class="card-title">Diseño y elaboración de material de comunicación</div>
+        <div class="card-desc">Diseño gráfico, maquetación, Photoshop y soportes visuales.</div>
+      </div>
+
+      <!-- TEST 3 -->
+      <div class="card" onclick="location.href='Test Universae+/Medios y soportes de comunicación/index.html';">
+        <div class="card-title">Medios y soportes de comunicación</div>
+        <div class="card-desc">Medios tradicionales, digitales, métricas, publicidad y formatos.</div>
+      </div>
+
+      <!-- TEST 4 -->
+      <div class="card" onclick="location.href='Test Universae+/Relaciones públicas y organización de eventos/index.html';">
+        <div class="card-title">Relaciones públicas y organización de eventos</div>
+        <div class="card-desc">Protocolo, imagen corporativa, eventos y gabinetes de crisis.</div>
+      </div>
+
+      <!-- TEST 5 -->
+      <div class="card" onclick="location.href='Test Universae+/Trabajo de campo en la investigación comercial/index.html';">
+        <div class="card-title">Trabajo de campo en la investigación comercial</div>
+        <div class="card-desc">Encuestas, muestreo, cuestionarios y análisis de datos.</div>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>
