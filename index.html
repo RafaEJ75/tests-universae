@@ -6,137 +6,319 @@
   <title>Tests Universae+</title>
 
   <style>
-    /* ===== Reset ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    /* ===== Base ===== */
+    :root {
+      --bg: #050816;
+      --bg-soft: #0b1220;
+      --card-bg: rgba(15, 23, 42, 0.92);
+      --card-border: rgba(148, 163, 184, 0.4);
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59, 130, 246, 0.16);
+      --shadow-accent: rgba(59, 130, 246, 0.4);
+    }
+
+    body[data-theme="blue"] {
+      --accent: #3b82f6;
+      --accent-soft: rgba(59, 130, 246, 0.16);
+      --shadow-accent: rgba(59, 130, 246, 0.45);
+    }
+
+    body[data-theme="purple"] {
+      --accent: #8b5cf6;
+      --accent-soft: rgba(139, 92, 246, 0.18);
+      --shadow-accent: rgba(139, 92, 246, 0.45);
+    }
+
+    body[data-theme="green"] {
+      --accent: #22c55e;
+      --accent-soft: rgba(34, 197, 94, 0.18);
+      --shadow-accent: rgba(34, 197, 94, 0.45);
+    }
+
     body {
-      font-family: "Inter", system-ui, sans-serif;
-      background: radial-gradient(circle at top, #1c2532 0%, #0d1117 70%);
-      color: #e6edf3;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(148, 163, 184, 0.14), transparent 55%),
+        radial-gradient(circle at bottom, rgba(15, 23, 42, 0.9), #020617);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       justify-content: center;
-      padding: 40px 20px;
+      padding: 32px 16px;
     }
 
-    .container {
+    .shell {
       width: 100%;
-      max-width: 1000px;
-      animation: fadeIn 0.7s ease forwards;
+      max-width: 1040px;
+      background: linear-gradient(to bottom right, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.96));
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow:
+        0 30px 80px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      padding: 22px 22px 26px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
+        radial-gradient(circle at 100% 0%, var(--accent-soft), transparent 55%);
+      opacity: 0.85;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
     }
 
     header {
-      text-align: center;
-      margin-bottom: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
     }
 
-    header h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      letter-spacing: -0.6px;
-      color: #f0f6fc;
-      text-shadow: 0 0 10px rgba(255,255,255,0.08);
+    .title-block h1 {
+      font-size: 1.9rem;
+      letter-spacing: -0.03em;
     }
 
-    header p {
-      margin-top: 8px;
-      font-size: 1rem;
-      color: #9aa7b7;
+    .subtitle {
+      margin-top: 4px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
     }
 
-    /* ===== Grid ===== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      margin-top: 6px;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--shadow-accent);
+    }
+
+    .theme-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .theme-label {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .theme-buttons {
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .theme-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: #020617;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .theme-btn span {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      display: block;
+    }
+
+    .theme-btn[data-theme="blue"] span { background: linear-gradient(135deg, #3b82f6, #22c1c3); }
+    .theme-btn[data-theme="purple"] span { background: linear-gradient(135deg, #a855f7, #6366f1); }
+    .theme-btn[data-theme="green"] span { background: linear-gradient(135deg, #22c55e, #14b8a6); }
+
+    .theme-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--shadow-accent);
+      transform: translateY(-1px);
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 25px;
-      padding: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-top: 10px;
     }
 
-    /* ===== Card ===== */
     .card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 14px;
-      padding: 30px 20px;
-      text-align: center;
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      padding: 18px 16px 20px;
       cursor: pointer;
-      backdrop-filter: blur(6px);
-      transition: all 0.25s ease;
-      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 0 0, var(--accent-soft), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
     }
 
     .card:hover {
-      border-color: #58a6ff;
-      transform: translateY(-6px);
-      box-shadow: 0 8px 28px rgba(88,166,255,0.18);
-      background: rgba(88, 166, 255, 0.05);
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.95), 0 0 18px var(--shadow-accent);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+    }
+
+    .card:hover::before {
+      opacity: 1;
     }
 
     .icon {
-      font-size: 2.3rem;
-      margin-bottom: 12px;
-      opacity: 0.85;
+      font-size: 1.9rem;
+      margin-bottom: 10px;
     }
 
     .card-title {
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 600;
-      letter-spacing: 0.3px;
-      color: #f0f6fc;
+      letter-spacing: 0.02em;
     }
 
-    /* ===== Animación ===== */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ===== Mobile ===== */
-    @media (max-width: 600px) {
-      header h1 { font-size: 2rem; }
-      .card { padding: 22px 18px; }
-      .icon { font-size: 2rem; }
+    @media (max-width: 640px) {
+      body { padding: 18px 10px; }
+      .shell { padding: 18px 16px 22px; border-radius: 18px; }
+      header { flex-direction: column; align-items: flex-start; }
+      .title-block h1 { font-size: 1.7rem; }
+      .theme-switcher { align-self: flex-end; }
     }
   </style>
 </head>
-<body>
+<body data-theme="blue">
+  <div class="shell">
+    <div class="content">
+      <header>
+        <div class="title-block">
+          <h1>Tests Universae</h1>
+          <p class="subtitle">Selecciona una asignatura para comenzar.</p>
+          <div class="badge">
+            <span class="badge-dot"></span>
+            <span>Acceso rápido a los 5 tests</span>
+          </div>
+        </div>
 
-  <div class="container">
-    <header>
-      <h1>Tests Universae</h1>
-      <p>Selecciona una asignatura para comenzar</p>
-    </header>
+        <div class="theme-switcher">
+          <span class="theme-label">Color</span>
+          <div class="theme-buttons">
+            <button class="theme-btn active" data-theme="blue" aria-label="Tema azul">
+              <span></span>
+            </button>
+            <button class="theme-btn" data-theme="purple" aria-label="Tema morado">
+              <span></span>
+            </button>
+            <button class="theme-btn" data-theme="green" aria-label="Tema verde">
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </header>
 
-    <main class="grid">
+      <main class="grid">
+        <div class="card" onclick="location.href='tests/atencion-cliente/index.html'">
+          <div class="icon">📞</div>
+          <div class="card-title">Atención al Cliente</div>
+        </div>
 
-      <div class="card" onclick="location.href='tests/atencion-cliente/index.html'">
-        <div class="icon">📞</div>
-        <div class="card-title">Atención al Cliente</div>
-      </div>
+        <div class="card" onclick="location.href='tests/diseno-material-comunicacion/index.html'">
+          <div class="icon">🎨</div>
+          <div class="card-title">Diseño y Material de Comunicación</div>
+        </div>
 
-      <div class="card" onclick="location.href='tests/diseno-material-comunicacion/index.html'">
-        <div class="icon">🎨</div>
-        <div class="card-title">Diseño y Material de Comunicación</div>
-      </div>
+        <div class="card" onclick="location.href='tests/medios-soportes-comunicacion/index.html'">
+          <div class="icon">📺</div>
+          <div class="card-title">Medios y Soportes de Comunicación</div>
+        </div>
 
-      <div class="card" onclick="location.href='tests/medios-soportes-comunicacion/index.html'">
-        <div class="icon">📺</div>
-        <div class="card-title">Medios y Soportes de Comunicación</div>
-      </div>
+        <div class="card" onclick="location.href='tests/relaciones-publicas-eventos/index.html'">
+          <div class="icon">🤝</div>
+          <div class="card-title">Relaciones Públicas y Eventos</div>
+        </div>
 
-      <div class="card" onclick="location.href='tests/relaciones-publicas-eventos/index.html'">
-        <div class="icon">🤝</div>
-        <div class="card-title">Relaciones Públicas y Eventos</div>
-      </div>
-
-      <div class="card" onclick="location.href='tests/trabajo-campo-investigacion/index.html'">
-        <div class="icon">📊</div>
-        <div class="card-title">Trabajo de Campo e Investigación</div>
-      </div>
-
-    </main>
+        <div class="card" onclick="location.href='tests/trabajo-campo-investigacion/index.html'">
+          <div class="icon">📊</div>
+          <div class="card-title">Trabajo de Campo e Investigación</div>
+        </div>
+      </main>
+    </div>
   </div>
 
+  <script>
+    const buttons = document.querySelectorAll('.theme-btn');
+    const body = document.body;
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.getAttribute('data-theme');
+        body.setAttribute('data-theme', theme);
+
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
