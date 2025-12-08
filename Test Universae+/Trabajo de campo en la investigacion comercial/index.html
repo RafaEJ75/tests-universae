@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trabajo de campo en la investigación comercial</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.70);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
+
+    .app {
+      max-width: 900px;
+      width: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.85),
+        rgba(245,245,245,0.8)
+      );
+      border-radius: 20px;
+      padding: 1.7rem 2rem;
+      box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+    }
+
+    button.primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.secondary:hover {
+      transform: scale(1.05);
+      background: #d1d5db;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .question-card {
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-number {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #6b7280;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s, transform 0.05s;
+      cursor: pointer;
+    }
+
+    .answer-option:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .answer-option input {
+      margin-top: 0.15rem;
+      cursor: pointer;
+    }
+
+    .answer-text {
+      font-size: 0.9rem;
+    }
+
+    .answer-option.correct {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+    }
+
+    .answer-option.incorrect {
+      background: #fee2e2;
+      border: 1px solid #dc2626;
+    }
+
+    .answer-option.unselected-correct {
+      background: #ecfdf5;
+      border: 1px dashed #16a34a;
+    }
+
+    .results {
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .score {
+      font-weight: 600;
+    }
+
+    .score.good {
+      color: #16a34a;
+    }
+
+    .score.medium {
+      color: #f59e0b;
+    }
+
+    .score.bad {
+      color: #dc2626;
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 1rem;
+        border-radius: 0.75rem;
+      }
+
+      .question-card {
+        padding: 0.8rem 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Trabajo de campo en la investigación comercial</h1>
+
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+    </div>
+
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      {
+        text: "¿Cuál de las siguientes es un punto fuerte de las dinámicas de grupo?",
+        answers: [
+          { text: "Subjetividad.", correct: false },
+          { text: "Dinamismo.", correct: true },
+          { text: "Artificialidad.", correct: false },
+          { text: "Estandarización", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes no es una teoría de la motivación?:",
+        answers: [
+          { text: "Teoría de las necesidades de Maslow.", correct: false },
+          { text: "Teoría del empowerment.", correct: false },
+          { text: "Teoría de los dos factores.", correct: false },
+          { text: "Teoría del boomerang.", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes no es un tipo de muestreo aleatorio?:",
+        answers: [
+          { text: "Sistemático.", correct: false },
+          { text: "Por conglomerados.", correct: false },
+          { text: "Por cuotas.", correct: true },
+          { text: "Estratificado.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es la primera fase en el proceso metodológico de la investigación comercial?:",
+        answers: [
+          { text: "Determinar los objetivos.", correct: false },
+          { text: "Diseñar la investigación.", correct: false },
+          { text: "Identificar el problema objeto de estudio.", correct: true },
+          { text: "Realizar una investigación preliminar para generar un objeto de estudio.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuáles son los principios básicos del Código ICC/ISOMAR?:",
+        answers: [
+          { text: "Obligatoriedad, racionalidad, equilibrio y semejanza.", correct: false },
+          { text: "Legalidad, confianza, responsabilidad e independencia.", correct: true },
+          { text: "Responsabilidad, neutralidad, buen hacer y corrección.", correct: false },
+          { text: "Legalidad, imparcialidad, concurrencia y moralidad.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué tipo de encuestas existen?:",
+        answers: [
+          { text: "CAPI, MCAPI, CATI y CAWI.", correct: false },
+          { text: "Estructuradas, semiestructuradas o en profundidad.", correct: false },
+          { text: "Personales, telefónicas, postales y online.", correct: true },
+          { text: "El tipo de encuesta depende de la naturaleza de la investigación y el colectivo al que se dirige.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué tipología de muestreo es considerada por diversos autores como un método semiprobabilístico?:",
+        answers: [
+          { text: "Muestreo estratificado", correct: false },
+          { text: "Muestreo por rutas aleatorias", correct: true },
+          { text: "Muestreos por cuotas", correct: false },
+          { text: "Muestreo aleatorio simple", correct: false }
+        ]
+      },
+      {
+        text: "Aquellas preguntas que presentan un proceso de codificación más complejo y requiere unos preparativos previos, se denominan:",
+        answers: [
+          { text: "Preguntas abiertas", correct: true },
+          { text: "Preguntas cerradas", correct: false },
+          { text: "Preguntas simples", correct: false },
+          { text: "Preguntas de respuesta múltiple", correct: false }
+        ]
+      },
+      {
+        text: "Atendiendo a la teoría de la pirámide de necesidades de Maslow, aquellas necesidades asociadas a logros, respeto ganado y confianza se denominan:",
+        answers: [
+          { text: "Necesidades sociales", correct: false },
+          { text: "Necesidades de seguridad", correct: false },
+          { text: "Necesidades de reconocimiento", correct: true },
+          { text: "Necesidades de autorealización", correct: false }
+        ]
+      },
+      {
+        text: "El cuerpo de un cuestionario tendrá preguntas:",
+        answers: [
+          { text: "De repuesta única, de respuesta múltiple, filtro, batería, de recuerdo y de control.", correct: false },
+          { text: "Cuantitativas, personales, directas y dinámicas.", correct: false },
+          { text: "De aproximación, de transición y complejas.", correct: true },
+          { text: "Estructuradas, semiestructuradas o en profundidad.", correct: false }
+        ]
+      },
+      {
+        text: "El desarrollo de la investigación comercial, bajo unos adecuados estándares de calidad, debe cumplir las siguientes condiciones:",
+        answers: [
+          { text: "Relevancia", correct: false },
+          { text: "Objetividad", correct: true },
+          { text: "Carácter sistemático", correct: false },
+          { text: "Subjetividad", correct: false }
+        ]
+      },
+      {
+        text: "El mentoring:",
+        answers: [
+          { text: "Dificulta la transmisión de nociones teóricas.", correct: false },
+          { text: "Se enfoca a temas concretos y específicos.", correct: false },
+          { text: "Permite una formación individual y específica.", correct: true },
+          { text: "Facilita la transmisión de documentos o recomendaciones.", correct: false }
+        ]
+      },
+      {
+        text: "A la hora de realizar una evaluación de los planes de formación dirigidos al personal encuestador que se han llevado a cabo en el seno de la organización, es preciso prestar atención, desde una perspectiva cualitativa, al nivel de consecución de nuestras expectativas previas en relación con:",
+        answers: [
+          { text: "El número exacto de encuestas realizadas por el docente", correct: false },
+          { text: "El tiempo que tarda el personal en realizar las encuestas", correct: false },
+          { text: "La modalidad de formación elegida, la capacitación y experiencia del entrevistado, y la estructura organizativa del entrevistado", correct: false },
+          { text: "La modalidad de formación elegida, la capacitación y experiencia del docente, y la estructura organizativa del docente", correct: true }
+        ]
+      },
+      {
+        text: "Atendiendo a la escala de medida intrínseca de la variable, aquellas asociadas a la pertenencia o no a una categoría, se denominan:",
+        answers: [
+          { text: "Variables ordinales", correct: true },
+          { text: "Variables de intervalo", correct: false },
+          { text: "Variables de razón", correct: false },
+          { text: "Variables nominales", correct: false }
+        ]
+      },
+      {
+        text: "El subsistema de datos internos se compone de:",
+        answers: [
+          { text: "Subsistema de inteligencia de marketing y subsistema de investigación comercial.", correct: false },
+          { text: "Fuentes primarias y fuentes secundarias.", correct: false },
+          { text: "Subsistema pedido-envío-factura y el subsistema de informes de ventas.", correct: true },
+          { text: "Subsistema de ventas y subsistema estadístico.", correct: false }
+        ]
+      },
+      {
+        text: "El tipo de investigación que se realiza de forma precia a otras investigaciones más detalladas y que persigue definir o clasificar conceptos, se denomina:",
+        answers: [
+          { text: "Investigación longitudinal", correct: false },
+          { text: "Investigación concluyente", correct: false },
+          { text: "Investigación transversal", correct: false },
+          { text: "Investigación exploratoria", correct: true }
+        ]
+      },
+      {
+        text: "En el muestreo sistemático, la forma más habitual de ir eligiendo los componentes de la muestra es a través de:",
+        answers: [
+          { text: "Un coeficiente de elevación.", correct: true },
+          { text: "Una afijación simple o proporcional.", correct: false },
+          { text: "Un cociente de conglomerados.", correct: false },
+          { text: "Una cuota asimétrica.", correct: false }
+        ]
+      },
+      {
+        text: "El primer paso a realizar en el proceso de tratamiento y análisis de los datos obtenidos en el desarrollo de una investigación comercial se denomina:",
+        answers: [
+          { text: "Tabulación", correct: false },
+          { text: "Numeración", correct: true },
+          { text: "Codificación", correct: false },
+          { text: "Verificación", correct: false }
+        ]
+      },
+      {
+        text: "Entre las capacidades más valoradas en el perfil profesional del personal encuestador, aquella que permite hacer frente de una forma constructiva a un gran número de incidencias y problemas no contemplados previamente por la entidad responsable del proyecto, se denomina:",
+        answers: [
+          { text: "Capacitación específica", correct: false },
+          { text: "Experiencia", correct: false },
+          { text: "Capacidad resolutiva y de superación del fracaso", correct: true },
+          { text: "Habilidades sociales y de comunicación", correct: false }
+        ]
+      },
+      {
+        text: "En el tratamiento de objeciones mostradas por nuestros interlocutores durante el proceso de negociación, la técnica basada en admitir la objeción, pero transformando su sentido para convertirla en un aspecto positivo sobre nuestra oferta comercial, se denomina:",
+        answers: [
+          { text: "Boomerang", correct: true },
+          { text: "Anticipación", correct: false },
+          { text: "Debilitación o atenuamiento", correct: false },
+          { text: "Reformulación interrogativa", correct: false }
+        ]
+      },
+      {
+        text: "La técnica de creatividad grupal en la que las personas participantes aportan, durante un tiempo previamente establecido, el mayor número de ideas posibles sobre un tema o problema determinado se denomina:",
+        answers: [
+          { text: "Observación", correct: false },
+          { text: "Brainstorming", correct: false },
+          { text: "Análisis de casos", correct: false },
+          { text: "Grupo de discusión", correct: true }
+        ]
+      },
+      {
+        text: "Entre las distintas tipologías de formación presencial para el equipo de campo de la investigación, aquella que se basa en la transmisión de información y conocimientos de un profesional experimentado con un carácter más informal y personalizado se denomina:",
+        answers: [
+          { text: "Taller presencial", correct: false },
+          { text: "Curso presencial", correct: false },
+          { text: "Outdoor training", correct: false },
+          { text: "Jornadas de mentoring", correct: true }
+        ]
+      },
+      {
+        text: "Entre las responsabilidades del coordinador de campo, destaca:",
+        answers: [
+          { text: "La función estratégica.", correct: false },
+          { text: "La función operativa.", correct: true },
+          { text: "La ejecución efectiva de las tareas.", correct: false },
+          { text: "La resolución de dudas.", correct: false }
+        ]
+      },
+      {
+        text: "La asignación de códigos o valores a las respuestas aportadas de las posibles respuestas a las preguntas contenidas en un cuestionario se denomina:",
+        answers: [
+          { text: "Tabulación", correct: false },
+          { text: "Numeración", correct: false },
+          { text: "Codificación", correct: true },
+          { text: "Verificación", correct: false }
+        ]
+      },
+      {
+        text: "La codificación:",
+        answers: [
+          { text: "Será diferente según el tipo de variable manejada.", correct: true },
+          { text: "Resuelve las incidencias durante el desarrollo del trabajo de campo.", correct: false },
+          { text: "Otorga un número o código a cada grupo de cuestionarios.", correct: false },
+          { text: "Ninguna es correcta.", correct: false }
+        ]
+      },
+      {
+        text: "La motivación de logro está asociada a:",
+        answers: [
+          { text: "Las características de la persona.", correct: false },
+          { text: "El rendimiento.", correct: false },
+          { text: "El reconocimiento social.", correct: true },
+          { text: "Las características del puesto de trabajo.", correct: false }
+        ]
+      },
+      {
+        text: "La realización de un pretest del cuestionario no tiene como finalidad:",
+        answers: [
+          { text: "Localizar fallos en la estructura del cuestionario", correct: false },
+          { text: "Generar el contacto preliminar entre los encuestadores y el cuestionario", correct: false },
+          { text: "Poner a prueba la duración, métodos y comprensión del cuestionario", correct: false },
+          { text: "Recoger datos útiles para la publicación de resultados.", correct: true }
+        ]
+      },
+      {
+        text: "La técnica de negociación basada en enfocar este proceso bajo la premisa de conseguir sus metas por encima de la creación de un consenso que beneficie a todas las partes se denomina:",
+        answers: [
+          { text: "Negociación subordinada", correct: false },
+          { text: "Negociación razonada", correct: false },
+          { text: "Negociación colaborativa", correct: false },
+          { text: "Negociación por confrontación", correct: true }
+        ]
+      },
+      {
+        text: "Las habilidades comunicativas y sociales sirven para:",
+        answers: [
+          { text: "Conseguir la colaboración de los individuos.", correct: false },
+          { text: "Construir un ambiente de confianza.", correct: false },
+          { text: "Extraer aportaciones sinceras y útiles.", correct: false },
+          { text: "Todas las opciones son correctas.", correct: true }
+        ]
+      },
+      {
+        text: "Las investigaciones exploratorias se suelen usar cuando:",
+        answers: [
+          { text: "Se precisa el cálculo de porcentajes o la asociación entre variables.", correct: false },
+          { text: "El proceso de extracción de información se hace sobre una población sin relación con el objeto de la investigación.", correct: true },
+          { text: "La empresa no cuenta con información especializada sobre la materia a la que tiene que enfrentarse.", correct: false },
+          { text: "El proceso de extracción de información se realiza sobre la población directamente relacionada con el objeto de investigación", correct: false }
+        ]
+      },
+      {
+        text: "Los estudios descriptivos se caracterizan porque:",
+        answers: [
+          { text: "Su principal objetivo es la aproximación a una situación o problema.", correct: false },
+          { text: "Tienen una menor rigidez tanto en los objetivos planteados como en los procedimientos y técnicas utilizados para la recogida de la información.", correct: false },
+          { text: "Analizan el grado de asociación entre variables, estableciendo una relación causal entre ellas.", correct: false },
+          { text: "Se basan en el cálculo de porcentajes o la asociación entre variables, sin otorgarles causalidad.", correct: true }
+        ]
+      },
+      {
+        text: "Los objetivos consistentes en la concreción cuantitativa de los objetivos específicos, mediante su transformación en propósitos medibles a través de indicadores, y directamente verificables, se denominan:",
+        answers: [
+          { text: "Objetivos operativos", correct: true },
+          { text: "Objetivos generales", correct: false },
+          { text: "Objetivos intermedios", correct: false },
+          { text: "Objetivos variables", correct: false }
+        ]
+      },
+      {
+        text: "Los objetivos específicos son:",
+        answers: [
+          { text: "Cualitativos y conductuales.", correct: true },
+          { text: "Cualitativos e integrales.", correct: false },
+          { text: "Terminales y medibles.", correct: false },
+          { text: "Cuantitativos y globales.", correct: false }
+        ]
+      },
+      {
+        text: "Para cubrir una necesidad de información que está desatendida en ese instante utilizaremos:",
+        answers: [
+          { text: "Fuentes primarias.", correct: true },
+          { text: "Técnicas de campo.", correct: false },
+          { text: "Investigaciones exploratorias.", correct: false },
+          { text: "Fuentes secundarias.", correct: false }
+        ]
+      },
+      {
+        text: "Según la naturaleza de la investigación, los cuestionarios pueden ser:",
+        answers: [
+          { text: "No estructurados, semiestructurados o estructurados.", correct: true },
+          { text: "Con presencia del encuestador o autoadministrados.", correct: false },
+          { text: "Abiertos, cerrados o semicerrados.", correct: false },
+          { text: "Descriptivos o causales.", correct: false }
+        ]
+      },
+      {
+        text: "Según la Teoría de las necesidades de Maslow:",
+        answers: [
+          { text: "Las necesidades de rango superior se satisfacen incluso cuando no están cubiertas las de rango inferior.", correct: false },
+          { text: "Todos los individuos llegan a las necesidades más altas.", correct: false },
+          { text: "Nunca se dan varias motivaciones de manera simultánea.", correct: false },
+          { text: "Ninguna opción es correcta.", correct: true }
+        ]
+      },
+      {
+        text: "Según las distintas tipologías de encuestas, aquella donde los encuentros son individuales y giran en torno a un cuestionario estructurado o semiestructurado es:",
+        answers: [
+          { text: "Encuesta personal", correct: true },
+          { text: "Encuesta postal", correct: false },
+          { text: "Encuesta online", correct: false },
+          { text: "Encuesta telefónica", correct: false }
+        ]
+      },
+      {
+        text: "Teniendo en cuenta los perfiles presentes en el equipo de campo de una investigación, la persona responsable de la planificación y organización estratégica del trabajo de campo de una investigación comercial se denomina:",
+        answers: [
+          { text: "Coordinador de campo", correct: false },
+          { text: "Coordinador supervisor", correct: false },
+          { text: "Coordinador logístico y de recolección de datos", correct: false },
+          { text: "Coordinador de proyecto", correct: true }
+        ]
+      },
+      {
+        text: "Un factor que no puede condicionar o incluso dificultar el desarrollo de una entrevista es:",
+        answers: [
+          { text: "La duración", correct: false },
+          { text: "El sesgo del personal investigador", correct: false },
+          { text: "El nivel cultural y la edad de la persona entrevistada", correct: false },
+          { text: "El tipo de bolígrafo que use el entrevistador para tomar notas", correct: true }
+        ]
+      },
+      {
+        text: "Uno de los apartados básicos dentro del informe final del trabajo de campo es:",
+        answers: [
+          { text: "Anexos.", correct: false },
+          { text: "Descripciones temáticas.", correct: false },
+          { text: "Mecanismos de control y supervisión.", correct: true },
+          { text: "Aclaraciones conceptuales.", correct: false }
+        ]
+      }
+    ];
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const checkBtn = document.getElementById("checkBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsBox = document.getElementById("results");
+    const scoreText = document.getElementById("scoreText");
+    const detailText = document.getElementById("detailText");
+
+    let quizState = [];
+
+    function shuffleArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function buildQuiz() {
+      questionsContainer.innerHTML = "";
+      resultsBox.style.display = "none";
+      checkBtn.disabled = false;
+
+      quizState = questionsData.map((q, index) => {
+        const shuffledAnswers = shuffleArray([...q.answers]);
+        const questionId = "q" + index;
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.questionId = questionId;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const num = document.createElement("div");
+        num.className = "question-number";
+        num.textContent = "Pregunta " + (index + 1);
+
+        const text = document.createElement("div");
+        text.className = "question-text";
+        text.textContent = q.text;
+
+        header.appendChild(num);
+        header.appendChild(text);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        shuffledAnswers.forEach((ans, ansIndex) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = questionId;
+          input.value = ansIndex;
+          input.dataset.correct = ans.correct ? "true" : "false";
+
+          const span = document.createElement("span");
+          span.className = "answer-text";
+          span.textContent = ans.text;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          answersDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(answersDiv);
+        questionsContainer.appendChild(card);
+
+        return {
+          questionId,
+          element: card
+        };
+      });
+    }
+
+    function gradeQuiz() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      quizState.forEach((q) => {
+        const card = q.element;
+        const options = card.querySelectorAll(".answer-option");
+        let selectedInput = null;
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          opt.classList.remove("correct", "incorrect", "unselected-correct");
+          if (input.checked) selectedInput = input;
+        });
+
+        if (!selectedInput) {
+          unanswered++;
+        } else if (selectedInput.dataset.correct === "true") {
+          correctCount++;
+        }
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          input.disabled = true;
+
+          if (input.dataset.correct === "true" && input.checked) {
+            opt.classList.add("correct");
+          } else if (input.dataset.correct === "false" && input.checked) {
+            opt.classList.add("incorrect");
+          } else if (input.dataset.correct === "true" && !input.checked) {
+            opt.classList.add("unselected-correct");
+          }
+        });
+      });
+
+      const total = questionsData.length;
+      const percentage = (correctCount / total) * 100;
+
+      let gradeClass = "bad";
+      if (percentage >= 80) gradeClass = "good";
+      else if (percentage >= 50) gradeClass = "medium";
+
+      scoreText.className = "score " + gradeClass;
+      scoreText.textContent = `Resultado: ${correctCount} de ${total} (${percentage.toFixed(1)}%)`;
+
+      let detail = "";
+      if (unanswered > 0) {
+        detail += `Preguntas sin responder: ${unanswered}. `;
+      }
+      if (percentage >= 80) {
+        detail += "Muy buen trabajo, dominas el tema ✅";
+      } else if (percentage >= 50) {
+        detail += "Vas bien, pero puedes repasar algunos conceptos 👍";
+      } else {
+        detail += "Mejor repasar antes del examen 📚";
+      }
+
+      detailText.textContent = detail;
+      resultsBox.style.display = "flex";
+      checkBtn.disabled = true;
+    }
+
+    checkBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", buildQuiz);
+
+    buildQuiz();
+  </script>
+</body>
+</html>
