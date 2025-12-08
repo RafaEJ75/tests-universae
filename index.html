@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Atención al Cliente, Consumidor y usuario</title>
+  <title>Medios y soportes de comunicación</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -11,26 +11,40 @@
       color: #111827;
     }
 
-  body {
-  background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
-}
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+      position: relative;
+    }
 
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.70);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
 
-
-   .app {
-  max-width: 900px;
-  width: 100%;
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.85),
-    rgba(245,245,245,0.8)
-  );
-  border-radius: 20px;
-  padding: 1.7rem 2rem;
-  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
-  border: 1px solid rgba(255,255,255,0.4);
-}
-
+    .app {
+      max-width: 900px;
+      width: 100%;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.85),
+        rgba(245,245,245,0.8)
+      );
+      border-radius: 20px;
+      padding: 1.7rem 2rem;
+      box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
 
     h1 {
       margin-top: 0;
@@ -54,36 +68,35 @@
       margin-bottom: 1.5rem;
     }
 
- button {
-  border: none;
-  border-radius: 12px;
-  padding: 0.65rem 1.2rem;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
 
-button.primary {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
-  color: white;
-  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
-}
+    button.primary {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+    }
 
-button.primary:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
-}
+    button.primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
 
-button.secondary {
-  background: #e5e7eb;
-  color: #111827;
-}
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
 
-button.secondary:hover {
-  transform: scale(1.05);
-  background: #d1d5db;
-}
-
+    button.secondary:hover {
+      transform: scale(1.05);
+      background: #d1d5db;
+    }
 
     button:disabled {
       opacity: 0.6;
@@ -157,7 +170,6 @@ button.secondary:hover {
       font-size: 0.9rem;
     }
 
-    /* Estados tras corregir */
     .answer-option.correct {
       background: #dcfce7;
       border: 1px solid #16a34a;
@@ -216,44 +228,11 @@ button.secondary:hover {
         padding: 0.8rem 0.75rem;
       }
     }
-    body {
-  margin: 0;
-  padding: 1.5rem;
-  display: flex;
-  justify-content: center;
-
-  /* ⭐ Fondo con imagen (pon aquí tu archivo) */
-  /* ⭐ Capa blanca semitransparente encima */
-  position: relative;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  /* Ajusta opacidad según gusto: 0.30 = más visible, 0.80 = más blanco */
-  background: rgba(255, 255, 255, 0.70);
-
-  /* Difumina suavemente el fondo (opcional pero elegante) */
-  backdrop-filter: blur(2px);
-
-  z-index: -1;
-}
-
   </style>
 </head>
 <body>
   <div class="app">
-    <h1>Atención al Cliente, Consumidor y Usuario</h1>
-   <!-- <p class="subtitle">
-  Plantilla editable · Respuestas aleatorias · Corrección automática
-</p> -->
-
-
+    <h1>Medios y soportes de comunicación</h1>
     <div class="controls">
       <button id="checkBtn" class="primary">Corregir test</button>
       <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
@@ -265,387 +244,378 @@ body::before {
       <div id="scoreText" class="score"></div>
       <div id="detailText"></div>
     </div>
-
-   <!--
-<p class="info-text">
-  Para crear nuevos tests, solo edita el array <strong>questions</strong> en el código.
-</p>
--->
-
   </div>
 
   <script>
     // ============================
-    // 1. EDITA AQUÍ TUS PREGUNTAS
+    // PREGUNTAS DEL TEST
     // ============================
-    // Para añadir más: copia un bloque { text: "...", answers: [...] } y ajusta el contenido.
     const questionsData = [
       {
-        text: "¿Cuál de las siguientes frases refleja una comunicación positiva de cara al cliente?",
+        text: "¿Cuál de las siguientes NO es un objetivo de la publicidad?",
         answers: [
-          { text: "En este momento es imposible atender su solicitud", correct: false },
-          { text: "Usted tiene que elegir esta opción", correct: false },
-          { text: "Será un placer atender su solicitud en cuanto estemos en disposición de ello.", correct: true },
-          { text: "No se admite ningún tipo de devolución sin el tique de compra.", correct: false }
+          { text: "Informar", correct: false },
+          { text: "Persuadir", correct: false },
+          { text: "Recordar", correct: false },
+          { text: "Encarecer", correct: true }
         ]
       },
       {
-        text: "¿Cuál de las siguientes no es una directriz que regula la comunicación verbal?",
+        text: "¿Cuál de las siguientes no es una forma publicitaria específica del soporte cinematográfico?",
         answers: [
-          { text: "Formalidad.", correct: false },
-          { text: "Positividad.", correct: false },
-          { text: "Ubicuidad.", correct: true },
-          { text: "Corrección gramatical.", correct: false }
+          { text: "Filmlet.", correct: false },
+          { text: "Tráiler.", correct: false },
+          { text: "Bartering.", correct: true },
+          { text: "Spot ambient.", correct: false }
         ]
       },
       {
-        text: "¿Cuál de las siguientes no es una queja o reclamación frecuente en la fase posterior a la adquisición del bien o servicio?",
+        text: "¿Cuál de los siguientes NO es un elemento que deba contener un documento briefing?",
         answers: [
-          { text: "Mala conservación del producto.", correct: false },
-          { text: "Instrucciones erróneas, confusas o incompletas.", correct: false },
-          { text: "Defectos de fábrica.", correct: false },
-          { text: "Ausencia de información relativa al producto.", correct: true }
+          { text: "Competencia directa e indirecta", correct: false },
+          { text: "Tono y estilo", correct: false },
+          { text: "Calendario o timing", correct: false },
+          { text: "Inventario de activos financieros", correct: true }
         ]
       },
       {
-        text: "¿Cuál de las siguientes no es una técnica cuantitativa para el control del rendimiento del departamento?",
+        text: "¿En qué tipo de informe se calcula el nivel de influencia de la marca, según la evolución de su imagen corporativa?",
         answers: [
-          { text: "Tasa Comparativa de Trámites Resueltos por el Agente.", correct: true },
-          { text: "Tasa de Variación de Trámites.", correct: false },
-          { text: "Tasa de Variación del Tiempo de Atención.", correct: false },
-          { text: "Tasa de Eficacia en el Servicio.", correct: false }
+          { text: "Informes por temas", correct: false },
+          { text: "Informes de reputación mediática", correct: true },
+          { text: "Informes de viralidad", correct: false },
+          { text: "Informes de competencia", correct: false }
         ]
       },
       {
-        text: "¿Cuál es el primer paso a la hora de establecer un plan de calidad?",
+        text: "¿Qué agencia contrata solo espacios publicitarios para los medios?",
         answers: [
-          { text: "Medición del desempeño", correct: false },
-          { text: "Disposición de los recursos materiales y humanos necesarios", correct: false },
-          { text: "Programación de actuaciones", correct: false },
-          { text: "Fijación de los objetivos", correct: true }
+          { text: "Agencias de servicios plenos", correct: false },
+          { text: "Agencias de publicidad general", correct: false },
+          { text: "Agencias digitales", correct: false },
+          { text: "Agencias exclusivas", correct: true }
         ]
       },
       {
-        text: "¿Cuándo hablamos de silencio administrativo?",
+        text: "¿Qué son las empresas press-dipping?",
         answers: [
-          { text: "Cuando una administración deja sin resolver una solicitud presentada adecuadamente a pesar de estar obligada a ello.", correct: true },
-          { text: "Cuando se alcanza una solución equitativa, asumible y acorde a la situación del cliente.", correct: false },
-          { text: "Cuando se resuelve administrativamente la problemática y se da por cerrada de manera definitiva.", correct: false },
-          { text: "Cuando el cliente muestra su malestar en el proceso de venta o en el servicio postventa.", correct: false }
+          { text: "Son empresas que prestan servicios como: rastreo de medos, efecto mediático de las campañas, remisión de dichas repercusiones, almacenamiento de todas las informaciones, registro de las cifras de viralidad o engagement.", correct: true },
+          { text: "Consisten únicamente en realizar seguimientos en medios escritos. Generalmente este tipo de empresas envían sus informes diariamente, a primera hora de la mañana.", correct: false },
+          { text: "Se dirige solamente al control en redes sociales.", correct: false },
+          { text: "Gestionan patrocinios deportivos.", correct: false }
         ]
       },
       {
-        text: "¿En cuál de las siguientes opciones el cliente requiere una actuación que ponga remedio a su malestar?",
+        text: "¿Qué son los informes de viralidad?",
         answers: [
-          { text: "En una queja", correct: false },
-          { text: "En una reclamación", correct: true },
-          { text: "En un escrito.", correct: false },
-          { text: "En una invitación", correct: false }
+          { text: "Donde las noticias están clasificadas según los distintos temas de interés del cliente, analizando el impacto sobre la audiencia de cada uno de ellos.", correct: false },
+          { text: "Se calcula el nivel de influencia de la marca, según la evolución de su imagen corporativa.", correct: false },
+          { text: "Sucede también que el cliente persiga conocer su posición con relación con la de sus competidores.", correct: false },
+          { text: "Se utiliza para saber la procedencia de las informaciones virales, con el objetivo de identificar influencers o líderes de opinión para lleven a cabo acciones publicitarias.", correct: true }
         ]
       },
       {
-        text: "¿En qué consiste la fórmula AIDA?",
+        text: "Cantidad pagada por cada clic que un usuario realice en un anuncio:",
         answers: [
-          { text: "En atraer al receptor para que compre un producto varias veces.", correct: false },
-          { text: "En ayudar al cliente, indicarle soluciones y agradecerle su atención.", correct: false },
-          { text: "En captar la atención, crear interés, provocar deseo y estimular la acción del receptor.", correct: true },
-          { text: "En variar la comunicación con el receptor para elegir la técnica que mejor se adapte a él.", correct: false }
+          { text: "Coste por mil efectivos", correct: false },
+          { text: "Coste por clic", correct: true },
+          { text: "Coste por adquisición (CPA)", correct: false },
+          { text: "Coste por mil efectivos", correct: false }
         ]
       },
       {
-        text: "¿Qué entendemos por escucha activa?",
+        text: "Consiste en hacer un seguimiento de páginas web, como portales de noticias, blogs, foros, wikis, podcasts, vídeos, etc.:",
         answers: [
-          { text: "La capacidad orientada a hacer sentir al cliente que se reciben y entienden sus demandas y que se atiende a sus sentimientos y emociones.", correct: true },
-          { text: "La habilidad para transmitir creencias o sentimientos de manera sosegada, constructiva y transparente.", correct: false },
-          { text: "La capacidad dirigida a comprender los sentimientos y emociones de los demás para ponerse en su lugar y compartir su estado.", correct: false },
-          { text: "La capacidad para inspirar o motivar al cliente.", correct: false }
+          { text: "Broadcast monitors", correct: false },
+          { text: "Newspaper clipping o print monitoring", correct: false },
+          { text: "Internet monitoring", correct: true },
+          { text: "Social media", correct: false }
         ]
       },
       {
-        text: "¿Qué miden los KPI (Key Performance Indicator)?",
+        text: "Consisten únicamente en realizar seguimientos en medios escritos. Generalmente este tipo de empresas envían sus informes diariamente, a primera hora de la mañana:",
         answers: [
-          { text: "El grado de consecución de una meta, en este caso, la satisfacción del cliente.", correct: true },
-          { text: "El número de reclamaciones que recibe una empresa en un año.", correct: false },
-          { text: "La cantidad de trabajadores del departamento de Atención al Cliente de una empresa", correct: false },
-          { text: "No son herramientas medidoras.", correct: false }
+          { text: "Broadcast monitors", correct: false },
+          { text: "Newspaper clipping o print monitoring", correct: true },
+          { text: "Internet monitoring", correct: false },
+          { text: "Social media", correct: false }
         ]
       },
       {
-        text: "¿Qué organigrama de empresa refleja mejor la jerarquía de responsabilidades a la hora de tomar decisiones?",
+        text: "El calendario de inserciones:",
         answers: [
-          { text: "Organigrama Lineal", correct: false },
-          { text: "Organigrama Piramidal", correct: true },
-          { text: "Organigrama Circular", correct: false },
-          { text: "Organigrama Matricial", correct: false }
+          { text: "Son los medios de comunicación que proporcionan de sus soportes publicitarios a la agencia.", correct: false },
+          { text: "Es la resta de la factura de los costes de proveedores de su campaña a la base imponible.", correct: false },
+          { text: "Consiste en uno de los componentes visuales que se añadirán en el resumen gráfico de la campaña que le será facilitado al cliente.", correct: true },
+          { text: "Una distribución semanal de reuniones internas.", correct: false }
         ]
       },
       {
-        text: "¿Qué técnica de negociación se considera más recomendable?",
+        text: "El contrato de creación publicitaria:",
         answers: [
-          { text: "Táctica de confrontación", correct: false },
-          { text: "Táctica coercitiva", correct: false },
-          { text: "Táctica estática", correct: false },
-          { text: "Táctica de concesiones estrictas", correct: true }
+          { text: "Defiende los principios básicos de respeto a la legalidad y a la constitución, la buena fe, la no explotación del miedo, la no incitación a la violencia, a comportamientos ilegales o a prácticas peligrosas, el respeto al buen gusto, la no discriminación, el derecho al honor y el respeto al medioambiente.", correct: false },
+          { text: "Se trata del contrato firmado por un anunciante y por una agencia de publicidad en el cual el primero le encomienda al segundo la creación, desarrollo o ejecución de una campaña publicitaria a cambio de una contraprestación.", correct: false },
+          { text: "Consiste en el contrato establecido entre un anunciante o una agencia y una persona física o jurídica, donde se llevará a cabo una campaña publicitaria partiendo de la idea por parte de la persona física o jurídica, a cambio de una contraprestación.", correct: true },
+          { text: "Aquel contrato firmado entre un patrocinado y un anunciante o patrocinador...", correct: false }
         ]
       },
       {
-        text: "¿Qué ventas especiales se contemplan en la LOCM?",
+        text: "El coste permitido es:",
         answers: [
-          { text: "Venta a distancia, venta automática, venta pública en subasta y franquicias.", correct: true },
-          { text: "Venta de saldos, ventas en liquidación, ventas con prima y ventas con obsequio.", correct: false },
-          { text: "Venta presencial, venta online, venta en subasta y venta internacional.", correct: false },
-          { text: "Venta virtual, venta asistida, leasing y franquicias.", correct: false }
+          { text: "Consiste en el resto de los gastos en los que incide la agencia en un intervalo de tiempo, mientras se está trabajando para un cliente en concreto. Puede ser internet, electricidad, departamento de administración, etc.", correct: false },
+          { text: "Son los medios de comunicación que proporcionan de sus soportes publicitarios a la agencia.", correct: false },
+          { text: "Es la resta de la factura de los costes de proveedores de su campaña a la base imponible.", correct: false },
+          { text: "Es la cantidad económica que el planificador tiene para contratar los servicios de los medios de comunicación.", correct: true }
         ]
       },
       {
-        text: "Con respecto a la apariencia del agente:",
+        text: "El coste por GRP:",
         answers: [
-          { text: "Se admitirá algún complemento siempre que no moleste a la hora de gesticular.", correct: true },
-          { text: "Se recomiendan las prendas llamativas y vistosas.", correct: false },
-          { text: "Se debe ir bien perfumado para impactar al cliente con el aroma.", correct: false },
-          { text: "El cabello largo irá suelto y natural, para transmitir personalidad.", correct: false }
+          { text: "Muestra el coste de cada GRP (gross rating point o cobertura por frecuencia de impactos).", correct: true },
+          { text: "Cantidad pagada por cada clic que un usuario realice en un anuncio.", correct: false },
+          { text: "Cantidad pagada por cada 1000 impresiones de un anuncio.", correct: false },
+          { text: "Se trata del rendimiento real que tienen los ingresos por cada mil impresiones.", correct: false }
         ]
       },
       {
-        text: "Con respecto a las técnicas de control, los auditores:",
+        text: "El impacto hace referencia a:",
         answers: [
-          { text: "Controlan a los agentes.", correct: true },
-          { text: "Hacen propuestas vinculantes.", correct: false },
-          { text: "Aplican las medidas correctoras.", correct: false },
-          { text: "Tienen las mismas funciones que los directivos", correct: false }
+          { text: "Relación entre el total de individuos que consume un medio con el público objetivo que lo consume también.", correct: false },
+          { text: "Es la exposición a un anuncio que un individuo puede sufrir...", correct: false },
+          { text: "Diferencia entre audiencia duplicada y la audiencia bruta...", correct: false },
+          { text: "Se define como el número total de personas, que pertenecen a un público objetivo, y que han sido impactadas por una campaña publicitaria.", correct: true }
         ]
       },
       {
-        text: "Con respecto al sistema de clasificación de documentos del DAC:",
+        text: "El telemarketing:",
         answers: [
-          { text: "Su elección es fruto de la aplicación de criterios de eficacia y eficiencia.", correct: true },
-          { text: "No requiere una planificación previa, sino una actuación inmediata.", correct: false },
-          { text: "Se mantendrá durante un periodo de tiempo limitado.", correct: false },
-          { text: "Solo podrá hacerse esta clasificación en formato digital", correct: false }
+          { text: "Pretende obtener resultados de forma rápida y en un intervalo corto de tiempo...", correct: false },
+          { text: "Se anuncia mediante web, blog, redes sociales, correo electrónico, etc.", correct: false },
+          { text: "Consiste en una forma de marketing directo cuyo fin es transmitir información sobre un producto, servicio o promoción con el objetivo de que sea adquirido o contratado de forma inmediata.", correct: true },
+          { text: "Se basa exclusivamente en la atención presencial al cliente.", correct: false }
         ]
       },
       {
-        text: "¿Cuál de las siguientes no es una sección común en los Planes de atención al cliente?",
+        text: "En televisión, el product placement es:",
         answers: [
-          { text: "Contextualización de la labor del SAC", correct: false },
-          { text: "Organización interna del SAC", correct: false },
-          { text: "Organización externa del SAC", correct: true },
-          { text: "Determinación de las actividades de los agentes", correct: false }
+          { text: "Un programa o serie que incluye productos, marcas o servicios de manera más o menos sutil.", correct: true },
+          { text: "Una cuña televisiva de entre 3 y 6 minutos que describe un producto, un servicio, una marca o una empresa.", correct: false },
+          { text: "Un spot que abre y cierra un determinado contenido editorial.", correct: false },
+          { text: "Un programa producido por un anunciante.", correct: false }
         ]
       },
       {
-        text: "Cuando se vende un producto defectuoso a un precio menor al de mercado, se trata de una:",
+        text: "Es el número de conversiones en relación con el número total de conversión dentro del sector:",
         answers: [
-          { text: "Venta en rebajas", correct: false },
-          { text: "Venta de promoción", correct: false },
-          { text: "Venta de saldos", correct: true },
-          { text: "Venta con prima", correct: false }
+          { text: "Average revenue per user (ARPU)", correct: false },
+          { text: "Share of voice (SoV)", correct: true },
+          { text: "Coste por Lead (CPL)", correct: false },
+          { text: "Retorno de la inversión (ROI)", correct: false }
         ]
       },
       {
-        text: "Dentro del proceso interno de gestión de quejas y reclamaciones, la valoración preliminar evalúa:",
+        text: "Es una herramienta dirigida a la planificación y la cuantificación, donde se establecen cuáles son los gastos que dispondrá la difusión en medios de campaña publicitaria:",
         answers: [
-          { text: "La importancia del cliente y la peligrosidad y dificultad de la queja.", correct: true },
-          { text: "Los hechos, el contexto y los clientes y productos implicados.", correct: false },
-          { text: "El expediente del cliente y los canales utilizados.", correct: false },
-          { text: "Los datos del reclamante, la instancia de solución de agravio y los documentos adjuntos.", correct: false }
+          { text: "Presupuesto", correct: true },
+          { text: "Coste salarial real directo", correct: false },
+          { text: "Coste permitido", correct: false },
+          { text: "Plan financiero", correct: false }
         ]
       },
       {
-        text: "Desde comienzos del siglo XX, la figura del cliente, consumidor y usuario ha ido cobrando cada vez más relevancia debido a:",
+        text: "Es una investigación de campo que estudia el consumo de medios de comunicación en España desde el año 1968:",
         answers: [
-          { text: "Los cambios en la actitud ante la compra.", correct: false },
-          { text: "La reducción del número de empresas.", correct: false },
-          { text: "El aumento constante de la oferta de bienes y servicios.", correct: true },
-          { text: "La creación de los servicios de atención al cliente en las empresas.", correct: false }
+          { text: "La AIMC", correct: false },
+          { text: "El EGM", correct: true },
+          { text: "La OJD", correct: false },
+          { text: "Estudio marco", correct: false }
         ]
       },
       {
-        text: "El arbitraje se desarrolla a través de:",
+        text: "Hace referencia a la publicidad que se lleva a cabo, por ejemplo, en la inauguración de un restaurante a la que acude un personaje famoso que posa en un photocall con el logo de la nueva empresa mientras lo entrevistan:",
         answers: [
-          { text: "Las Alternative Dispute Resolution.", correct: false },
-          { text: "Las instancias generales y los recursos.", correct: false },
-          { text: "Las juntas arbitrales de consumo y los órganos arbitrales.", correct: true },
-          { text: "Los árbitros colegiados y los administradores colegiales.", correct: false }
+          { text: "Publicity", correct: true },
+          { text: "Publicidad online", correct: false },
+          { text: "Publicidad directa", correct: false },
+          { text: "Publicidad en el lugar de venta", correct: false }
         ]
       },
       {
-        text: "El data mining y el CMR se utilizan para:",
+        text: "Hace referencia a la técnica cuantitativa de investigación de mercados cuyo fin es medir la evolución de las ventas generadas por los establecimientos detallistas o minoristas:",
         answers: [
-          { text: "Incrementar la calidad de la toma de decisiones de la organización.", correct: false },
-          { text: "almacenar y conservar documentos", correct: false },
-          { text: "facilitar el acceso a los documentos a cualquier miembro del equipo", correct: false },
-          { text: "recoger y analizar datos relativos a los clientes y generar tendencias, patrones y resultados significativos para la empresa.", correct: true }
+          { text: "Panel del consumidor", correct: true },
+          { text: "Audiencia", correct: false },
+          { text: "Fuentes de información", correct: false },
+          { text: "Muestra representativa", correct: false }
         ]
       },
       {
-        text: "El marketing relacional promueve la adopción de una actitud ______________ con el cliente.",
+        text: "Hace referencia a las horas que cada empleado no invierte directamente a los clientes, teniendo de referencia la unidad del coste salarial real:",
         answers: [
-          { text: "Negativa", correct: false },
-          { text: "Reactiva", correct: false },
-          { text: "Proactiva", correct: true },
-          { text: "Compasiva", correct: false }
+          { text: "Coste salarial real directo", correct: false },
+          { text: "Coste salarial real indirecto", correct: true },
+          { text: "Coste de proveedores", correct: false },
+          { text: "Coste administrativo", correct: false }
         ]
       },
       {
-        text: "El organismo que otorga a las entidades externas el permiso para actuar como certificadoras es:",
+        text: "Hace referencia al contrato firmado por un anunciante y por una agencia de publicidad el cual el primero le encomienda al segundo la creación, desarrollo o ejecución de una campaña publicitaria a cambio de una contraprestación:",
         answers: [
-          { text: "La Organización ISO.", correct: false },
-          { text: "SERVQUAL.", correct: false },
-          { text: "La Entidad Nacional de Acreditación.", correct: true },
-          { text: "La Asociación Nacional de Entidades Certificadoras y Acreditadoras.", correct: false }
+          { text: "Contrato de publicidad", correct: true },
+          { text: "Contrato de creación publicitaria", correct: false },
+          { text: "Contrato de creación de medios", correct: false },
+          { text: "Contrato de Marketing", correct: false }
         ]
       },
       {
-        text: "El procedimiento que consiste en recurrir a fórmulas como el arbitraje o la mediación cuando internamente no se logra una gestión exitosa de la queja o reclamación se denomina:",
+        text: "La cuota o share se entiende como:",
         answers: [
-          { text: "Resolución informal interna", correct: false },
-          { text: "Resolución formal interna", correct: false },
-          { text: "Resolución formal externa", correct: true },
-          { text: "Resolución formal judicial", correct: false }
+          { text: "Número total de personas que pertenecen al público objetivo y que han recibido el número de impactos suficientes para contestar al estímulo publicitario.", correct: false },
+          { text: "Son el total de impactos logrados con el plan de medios...", correct: false },
+          { text: "Porcentaje de espectadores que han visto un programa específico en relación con el número total de espectadores que estaban viendo la televisión a la misma hora.", correct: true },
+          { text: "Relación entre el total de individuos que consume un medio con el público objetivo que lo consume también.", correct: false }
         ]
       },
       {
-        text: "En el SAC se recomienda que la comunicación sea:",
+        text: "La Ley General para la Defensa de los Consumidores y Usuarios y otras leyes complementarias es otro de las normativas, se recogen en:",
         answers: [
-          { text: "Colectiva, extraoficial e informal", correct: false },
-          { text: "Individual, oficial y formal", correct: true },
-          { text: "Individual, informal y cooficial", correct: false },
-          { text: "Individual, extraoficial y formal.", correct: false }
+          { text: "Real Decreto Legislativo 1/2007, de 16 de noviembre.", correct: true },
+          { text: "El Real Decreto 1416/1994, de 25 de junio.", correct: false },
+          { text: "Real Decreto Legislativo 1/2003, de 16 de noviembre.", correct: false },
+          { text: "El Real Decreto 1416/1999, de 25 de septiembre.", correct: false }
         ]
       },
       {
-        text: "En función de cómo ejerzan sus labores, los agentes pueden ser:",
+        text: "Las agencias de publicidad son:",
         answers: [
-          { text: "Operadores, teleoperadores, gestores y front office.", correct: true },
-          { text: "Encuestadores, coordinadores, filtro y auditores.", correct: false },
-          { text: "De contacto, de supervisión, de resolución y de atención.", correct: false },
-          { text: "Front office, back office, complementarios y administrativos.", correct: false }
+          { text: "Intermediarios entre el anunciante y el público, valiéndose para ello de los diferentes medios de comunicación o soportes publicitarios.", correct: true },
+          { text: "La empresa anunciante dispone de un departamento de marketing...", correct: false },
+          { text: "Número de personas u hogares que el medio recoge.", correct: false },
+          { text: "Intermediarios entre el anunciante y el público, usando medios o soportes publicitarios.", correct: false }
         ]
       },
       {
-        text: "En una base de datos Relacional:",
+        text: "Las fuentes de información primaria se entienden como:",
         answers: [
-          { text: "Los campos están incluidos en el propio archivo, conformando una única tabla de registros y campos.", correct: false },
-          { text: "Se aglutinan, organizan y sincronizan datos provenientes de campos de varios archivos o bases de datos.", correct: true },
-          { text: "Permite añadir dos o más datos en un mismo campo.", correct: false },
-          { text: "Únicamente recopila y organiza los datos, de forma que facilite su visualización.", correct: false }
+          { text: "La información es nueva y procede de libros, revistas, periódicos, documentos oficiales, informes, etc.", correct: true },
+          { text: "La información es extraída o reestructurada desde la información original...", correct: false },
+          { text: "Una empresa española proveedora de software para medios publicitarios...", correct: false },
+          { text: "Método estructurado y sistémico sobre un asunto o tema específico...", correct: false }
         ]
       },
       {
-        text: "La comunicación empresarial externa se produce con:",
+        text: "Las fuentes de información secundaria se entienden como:",
         answers: [
-          { text: "Los stakeholders internos y externos.", correct: true },
-          { text: "Los clientes, consumidores y usuarios.", correct: false },
-          { text: "El público objetivo que haya definido la empresa.", correct: false },
-          { text: "Las administraciones públicas y agentes sociales.", correct: false }
+          { text: "La información es nueva y procede de libros, revistas, periódicos, documentos oficiales, informes, etc.", correct: false },
+          { text: "La información es extraída o reestructurada desde la información original. Se trata de enciclopedias, directorios, libros o artículos basados en otros trabajos, etc.", correct: true },
+          { text: "Una empresa española proveedora de software para medios publicitarios...", correct: false },
+          { text: "Método estructurado y sistémico sobre un asunto o tema específico...", correct: false }
         ]
       },
       {
-        text: "La comunicación interna es diagonal cuando:",
+        text: "Los Banners:",
         answers: [
-          { text: "Se produce entre unidades del mismo escalafón del organigrama de la empresa, independientemente de si están en la misma área funcional o no.", correct: false },
-          { text: "Va de los rangos inferiores hacia los superiores dentro de la misma área funcional.", correct: false },
-          { text: "Permite el flujo de información entre rangos y áreas diferentes, pudiendo ser ascendente o descendente.", correct: true },
-          { text: "Va de los rangos superiores hacia los inferiores dentro de la misma área funcional.", correct: false }
+          { text: "Son rótulos que normalmente indican el nombre y el logotipo de la marca y están sujetos a un soporte llamativo que permite que destaquen los distintos colores.", correct: false },
+          { text: "Son elementos impresos en papel, que albergan información de interés de un producto o un servicio...", correct: false },
+          { text: "En turismos o automóviles pretenden dar a conocer alguna promoción...", correct: false },
+          { text: "Son espacios publicitarios situados en distintas zonas estratégicas de una página web.", correct: true }
         ]
       },
       {
-        text: "La definición de las actuaciones de los agentes tiene como objetivo:",
+        text: "Los informes dispondrán de las siguientes características:",
         answers: [
-          { text: "Dejar un margen amplio para la improvisación de los agentes.", correct: false },
-          { text: "Ofrecer unas directrices claras al responsable del SAC.", correct: false },
-          { text: "Acercarse al cumplimiento íntegro de lo planificado.", correct: true },
-          { text: "Evitar las llamadas telefónicas", correct: false }
+          { text: "Claridad, buena redacción, precisión, buena imagen y estar completada toda la información pertinente.", correct: true },
+          { text: "Claridad, redacción adecuada, revisión de diversos departamentos y revisión de supervisor final.", correct: false },
+          { text: "Claridad, buena redacción, precisión, buena imagen y aprobación del encargado.", correct: false },
+          { text: "Inclusión de opiniones personales sin contrastar.", correct: false }
         ]
       },
       {
-        text: "La ficha de cliente puede adquirir dos formatos:",
+        text: "Los luminosos:",
         answers: [
-          { text: "Ficha de archivo o ficha de registro.", correct: false },
-          { text: "Ficha abierta o ficha acotada.", correct: false },
-          { text: "Ficha resumida o ficha completa.", correct: true },
-          { text: "Ficha económica o ficha identificativa.", correct: false }
+          { text: "Son rótulos que normalmente indican el nombre y el logotipo de la marca y están sujetos a un soporte llamativo que permite que destaquen los distintos colores.", correct: true },
+          { text: "Son elementos impresos en papel, que albergan información de interés de un producto o un servicio...", correct: false },
+          { text: "En turismos o automóviles pretenden dar a conocer alguna promoción...", correct: false },
+          { text: "Son espacios publicitarios situados en distintas zonas estratégicas de una página web.", correct: false }
         ]
       },
       {
-        text: "La identidad corporativa:",
+        text: "Retorno de la inversión (ROI):",
         answers: [
-          { text: "Es la propuesta, el valor, la personalidad que caracteriza y diferencia a la empresa.", correct: false },
-          { text: "Es una idea mental que el consumidor se construye sobre la empresa.", correct: false },
-          { text: "Son los elementos que representan de forma visual y material a la empresa.", correct: true },
-          { text: "Está vinculada a una correcta aplicación del marketing relacional.", correct: false }
+          { text: "Es el coste que se paga por cada venta realizada.", correct: false },
+          { text: "Es el número de conversiones en relación con el número total de conversiones dentro del sector.", correct: false },
+          { text: "Consiste en la relación entre los ingresos totales y los usuarios únicos.", correct: false },
+          { text: "Es el beneficio que resulta de la inversión realizada.", correct: true }
         ]
       },
       {
-        text: "La inversión en I+D se trata de un:",
+        text: "Se trata de la información que está oculta, pero es necesaria para que el consumidor pueda decidirse con conocimiento de causa o información confusa o coherente:",
         answers: [
-          { text: "Factor interno de la empresa, puesto que la empresa es responsable de buscar nuevos procesos que optimicen el tiempo y los recursos.", correct: true },
-          { text: "Es un factor externo, porque depende del desarrollo tecnológico de los últimos años.", correct: false },
-          { text: "Es un factor intermedio, ya que depende de los directivos y los clientes", correct: false },
-          { text: "Es un factor interno, ya que la empresa tiene un control mínimo o nulo sobre esta.", correct: false }
+          { text: "Actos de engaño", correct: false },
+          { text: "Actos de confusión", correct: false },
+          { text: "Prácticas agresivas", correct: false },
+          { text: "Omisiones engañosas", correct: true }
         ]
       },
       {
-        text: "La LOCM sanciona las infracciones graves con una cuantía de:",
+        text: "Se trata de la información que está oculta, pero es necesaria para que el consumidor pueda decidirse con conocimiento de causa o información confusa o coherente:",
         answers: [
-          { text: "Hasta 6.000€", correct: false },
-          { text: "Entre 6.000 y 30.000€", correct: true },
-          { text: "Entre 30.000 y 900.000€", correct: false },
-          { text: "Superior a 600.000€", correct: false }
+          { text: "Actos de engaño", correct: false },
+          { text: "Actos de confusión", correct: false },
+          { text: "Prácticas agresivas", correct: false },
+          { text: "Omisiones engañosas", correct: true }
         ]
       },
       {
-        text: "Los clientes potenciales son aquellos que:",
+        text: "Se utiliza para reflejar en panel diferentes indicadores de interés para las organizaciones, con el objetivo de llevar un control más preciso y riguroso en la relación con dichos indicadores:",
         answers: [
-          { text: "Han adquirido el bien o servicio de la empresa al menos una vez", correct: false },
-          { text: "Ya tienen una opinión formada con respecto a la compra antes de contactar con la empresa.", correct: false },
-          { text: "Hacen uso del bien o servicio con intención de obtener rentabilidad en una actividad económica posterior", correct: false },
-          { text: "No han adquirido el bien o disfrutado del servicio, pero están en condiciones de hacerlo a corto plazo.", correct: true }
+          { text: "Cuadro de mandos", correct: true },
+          { text: "Calendario", correct: false },
+          { text: "Timing", correct: false },
+          { text: "Indicadores clave", correct: false }
         ]
       },
       {
-        text: "Los contact centers:",
+        text: "Selecciona la opción incorrecta. Algunos pasos de la técnica de investigación cuantitativa son:",
         answers: [
-          { text: "Son una modalidad de subcontratación que ofrece menor eficiencia a corto plazo.", correct: false },
-          { text: "Obligan a la empresa a formar a los profesionales que los componen.", correct: false },
-          { text: "Requieren un acuerdo de contratación claro en cuanto a los términos en los que se prestará el servicio.", correct: true },
-          { text: "Contactan con los empleados para ver cómo se sienten", correct: false }
+          { text: "Determinar las características de los locales o establecimientos que comercializan las publicaciones.", correct: false },
+          { text: "Realizar el censo y determinar la cantidad de establecimientos y sus rasgos.", correct: false },
+          { text: "Diseñar la muestra de establecimientos y su método.", correct: false },
+          { text: "Clasificar los anuncios según el estilo creativo.", correct: true }
         ]
       },
       {
-        text: "Los mecanismos que permiten a los ciudadanos relacionarse con las administraciones son:",
+        text: "Son los actos que pretenden dañar la imagen de una empresa para perjudicar su crédito:",
         answers: [
-          { text: "Los actos administrativos.", correct: false },
-          { text: "Las denuncias, las instancias generales y los recursos administrativos.", correct: true },
-          { text: "El derecho de petición, recogido en el artículo 29 de la Constitución.", correct: false },
-          { text: "Los recogidos en la Ley 11/2011, de 20 de mayo, de regulación institucional en la Administración General del Estado.", correct: false }
+          { text: "Actos de engaño", correct: false },
+          { text: "Actos de confusión", correct: false },
+          { text: "Actos de denigración", correct: true },
+          { text: "Omisiones engañosas", correct: false }
         ]
       },
       {
-        text: "Una persona física que se hace con determinados bienes o servicios para hacer un uso personal de los mismos, sin ninguna pretensión de incorporarlos a posteriores actividades lucrativas es:",
+        text: "Toda transmisión de información a través de un medio de comunicación que se realiza de forma impersonal y remunerada para un público objetivo con la finalidad de estimular la demanda de un producto o servicio:",
         answers: [
-          { text: "Un cliente", correct: false },
-          { text: "Un consumidor", correct: true },
-          { text: "Un usuario", correct: false },
-          { text: "Comprador", correct: false }
+          { text: "Publicidad", correct: true },
+          { text: "Comunicación", correct: false },
+          { text: "Marketing", correct: false },
+          { text: "Difusión", correct: false }
         ]
       },
       {
-        text: "Uno de los aspectos destacados que se recogen en el contenido de la LOPD es:",
+        text: "Trata de perseguir al usuario que se ha interesado por una web o que no ha terminado un proceso de compra:",
         answers: [
-          { text: "La exactitud de los datos.", correct: true },
-          { text: "La solución de conflictos.", correct: false },
-          { text: "El deber de compatibilidad.", correct: false },
-          { text: "La autorización para la divulgación de los datos recopilados.", correct: false }
+          { text: "Retargeting o remarketing", correct: true },
+          { text: "Social ads o redes sociales", correct: false },
+          { text: "Ventanas emergentes", correct: false },
+          { text: "Publicidad contextual", correct: false }
         ]
       }
     ];
 
-    // =====================================
-    // 2. LÓGICA DEL TEST (NO TOCAR SI NO HACE FALTA)
-    // =====================================
-
+    // ============================
+    // LÓGICA DEL TEST
+    // ============================
     const questionsContainer = document.getElementById("questionsContainer");
     const checkBtn = document.getElementById("checkBtn");
     const resetBtn = document.getElementById("resetBtn");
@@ -742,7 +712,6 @@ body::before {
           correctCount++;
         }
 
-        // Marcar visualmente correctas / incorrectas
         options.forEach(opt => {
           const input = opt.querySelector("input");
           input.disabled = true;
@@ -774,9 +743,9 @@ body::before {
       if (percentage >= 80) {
         detail += "Muy buen trabajo, dominas el tema ✅";
       } else if (percentage >= 50) {
-        detail += "Nada mal, pero puedes repasar algunos conceptos 👍";
+        detail += "Vas bien, pero puedes repasar algunos conceptos 👍";
       } else {
-        detail += "Te conviene repasar el contenido antes del examen 📚";
+        detail += "Mejor repasar antes del examen 📚";
       }
 
       detailText.textContent = detail;
@@ -787,7 +756,6 @@ body::before {
     checkBtn.addEventListener("click", gradeQuiz);
     resetBtn.addEventListener("click", buildQuiz);
 
-    // Construir el test al cargar
     buildQuiz();
   </script>
 </body>
