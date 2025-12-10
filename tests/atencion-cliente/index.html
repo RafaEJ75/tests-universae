@@ -253,9 +253,6 @@ body::before {
   Plantilla editable · Respuestas aleatorias · Corrección automática
 </p> -->
 
-
-    
-
    <!--
 <p class="info-text">
   Para crear nuevos tests, solo edita el array <strong>questions</strong> en el código.
@@ -631,16 +628,17 @@ body::before {
         ]
       }
     ];
-    <div id="questionsContainer" class="questions"></div>
-<div class="controls">
-  <button id="checkBtn" class="primary">Corregir test</button>
-  <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
-</div>
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+    </div>
 
-<div id="results" class="results" style="display:none;">
-  <div id="scoreText" class="score"></div>
-  <div id="detailText"></div>
-</div>
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
     // =====================================
     // 2. LÓGICA DEL TEST (NO TOCAR SI NO HACE FALTA)
     // =====================================
@@ -781,9 +779,6 @@ body::before {
       detailText.textContent = detail;
       resultsBox.style.display = "flex";
       checkBtn.disabled = true;
-      window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
     }
 
     checkBtn.addEventListener("click", gradeQuiz);
