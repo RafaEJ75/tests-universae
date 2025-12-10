@@ -47,14 +47,12 @@
     }
 
     .controls {
-  position: sticky;
-  top: 20px;
-  z-index: 100;
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
 
  button {
   border: none;
@@ -254,7 +252,9 @@ body::before {
    <!-- <p class="subtitle">
   Plantilla editable · Respuestas aleatorias · Corrección automática
 </p> -->
-<div class="controls">
+
+
+    <div class="controls">
       <button id="checkBtn" class="primary">Corregir test</button>
       <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
     </div>
@@ -265,6 +265,7 @@ body::before {
       <div id="scoreText" class="score"></div>
       <div id="detailText"></div>
     </div>
+
    <!--
 <p class="info-text">
   Para crear nuevos tests, solo edita el array <strong>questions</strong> en el código.
@@ -640,7 +641,6 @@ body::before {
         ]
       }
     ];
-    
     // =====================================
     // 2. LÓGICA DEL TEST (NO TOCAR SI NO HACE FALTA)
     // =====================================
