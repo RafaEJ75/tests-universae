@@ -47,12 +47,17 @@
     }
 
     .controls {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
+  position: sticky;
+  bottom: 0;
+  background: rgba(20, 10, 40, 0.9);
+  backdrop-filter: blur(6px);
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  z-index: 1000;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
 
  button {
   border: none;
@@ -641,17 +646,6 @@ body::before {
         ]
       }
     ];
-    <div class="controls">
-      <button id="checkBtn" class="primary">Corregir test</button>
-      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
-    </div>
-
-    <div id="questionsContainer" class="questions"></div>
-
-    <div id="results" class="results" style="display:none;">
-      <div id="scoreText" class="score"></div>
-      <div id="detailText"></div>
-    </div>
     // =====================================
     // 2. LÓGICA DEL TEST (NO TOCAR SI NO HACE FALTA)
     // =====================================
