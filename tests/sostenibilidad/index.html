@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sostenibilidad aplicada al sistema productivo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+  body {
+  background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+}
+
+   .app {
+  max-width: 900px;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.85),
+    rgba(245,245,245,0.8)
+  );
+  border-radius: 20px;
+  padding: 1.7rem 2rem;
+  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+ button {
+  border: none;
+  border-radius: 12px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+}
+
+button.primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
+button.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+button.secondary:hover {
+  transform: scale(1.05);
+  background: #d1d5db;
+}
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .question-card {
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-number {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #6b7280;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s, transform 0.05s;
+      cursor: pointer;
+    }
+
+    .answer-option:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .answer-option input {
+      margin-top: 0.15rem;
+      cursor: pointer;
+    }
+
+    .answer-text {
+      font-size: 0.9rem;
+    }
+
+    /* Estados tras corregir */
+    .answer-option.correct {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+    }
+
+    .answer-option.incorrect {
+      background: #fee2e2;
+      border: 1px solid #dc2626;
+    }
+
+    .answer-option.unselected-correct {
+      background: #ecfdf5;
+      border: 1px dashed #16a34a;
+    }
+
+    .results {
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .score {
+      font-weight: 600;
+    }
+
+    .score.good {
+      color: #16a34a;
+    }
+
+    .score.medium {
+      color: #f59e0b;
+    }
+
+    .score.bad {
+      color: #dc2626;
+    }
+
+    .info-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .app {
+        padding: 1rem;
+        border-radius: 0.75rem;
+      }
+
+      .question-card {
+        padding: 0.8rem 0.75rem;
+      }
+    }
+    body {
+  margin: 0;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(2px);
+  z-index: -1;
+}
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Sostenibilidad y ODS</h1>
+
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+    </div>
+
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // ============================
+    // 1. PREGUNTAS DEL TEST
+    // ============================
+    const questionsData = [
+      {
+        text: "¿A qué nos referimos cuando los cambios se producen en la cantidad y distribución de la población?",
+        answers: [
+          { text: "Desempleo", correct: false },
+          { text: "Pobreza y exclusión social", correct: false },
+          { text: "Migración", correct: false },
+          { text: "Reto demográfico", correct: true }
+        ]
+      },
+      {
+        text: "¿Cómo pueden las empresas cumplir con el ODS de Energía asequible y no contaminante?",
+        answers: [
+          { text: "Utilizar energías renovables", correct: false },
+          { text: "Reducir el consumo energético", correct: false },
+          { text: "Usar equipos de bajo consumo y eficientes", correct: false },
+          { text: "Todas son correctas", correct: true }
+        ]
+      },
+      {
+        text: "¿Cómo se define la práctica del \"greenwashing\" en el contexto ambiental?",
+        answers: [
+          { text: "Estrategia de producción sostenible basada en la economía circular", correct: false },
+          { text: "Método de diseño que considera el impacto ambiental de un producto", correct: false },
+          { text: "Implementación de la normativa ISO 14001 en empresas", correct: false },
+          { text: "Práctica de marketing para aparentar responsabilidad ambiental sin cambios reales", correct: true }
+        ]
+      },
+      {
+        text: "¿Cómo se denomina al modelo económico basado en la producción en masa, el consumo y crecimiento económico continuo y la desregulación económica?",
+        answers: [
+          { text: "Economía circular", correct: false },
+          { text: "Economía verde", correct: false },
+          { text: "Capitalismo", correct: true },
+          { text: "Economía lineal", correct: false }
+        ]
+      },
+      {
+        text: "¿Cómo se llama el acuerdo creado a nivel internacional, que pretende frenar las emisiones de gases de efecto invernadero?",
+        answers: [
+          { text: "Protocolo de Kioto", correct: true },
+          { text: "Protocolo de Tokio", correct: false },
+          { text: "Protocolo de Okazaki", correct: false },
+          { text: "Protocolo de Kobe", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes NO es uno de los 5 principios de sostenibilidad?",
+        answers: [
+          { text: "Planeta", correct: false },
+          { text: "Paz", correct: false },
+          { text: "Promoción", correct: true },
+          { text: "Participación", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes opciones es un ejemplo de modelo de negocio en la economía circular?",
+        answers: [
+          { text: "Producción en masa de productos de un solo uso.", correct: false },
+          { text: "Venta exclusiva de productos nuevos en tiendas minoristas.", correct: false },
+          { text: "Upcycling o suprareciclaje, donde los materiales desechados se transforman en nuevos productos.", correct: true },
+          { text: "Eliminación rápida de productos antiguos para dar paso a nuevos lanzamientos.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es uno de los principales objetivos de la economía verde?",
+        answers: [
+          { text: "Alcanzar el crecimiento económico sin importar el impacto ambiental.", correct: false },
+          { text: "Fomentar el desarrollo sostenible mediante la reducción del impacto ambiental y la equidad social.", correct: true },
+          { text: "Promover el uso exclusivo de combustibles fósiles para mejorar la economía.", correct: false },
+          { text: "Maximizar el consumo de recursos naturales para generar beneficios económicos rápidos.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuántos ODS hay planteados?",
+        answers: [
+          { text: "10", correct: false },
+          { text: "15", correct: false },
+          { text: "20", correct: false },
+          { text: "17", correct: true }
+        ]
+      },
+      {
+        text: "¿En qué año se han de cumplir los ODS?",
+        answers: [
+          { text: "2030", correct: true },
+          { text: "2050", correct: false },
+          { text: "2015", correct: false },
+          { text: "2020", correct: false }
+        ]
+      },
+      {
+        text: "¿En qué ODS se promueve reducir el desperdicio de alimento y la colaboración con comedores sociales?",
+        answers: [
+          { text: "Hambre cero", correct: true },
+          { text: "Fin de la pobreza", correct: false },
+          { text: "Educación de calidad", correct: false },
+          { text: "Igualdad de género", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué distingue a la economía circular del modelo económico tradicional?",
+        answers: [
+          { text: "La economía circular busca desechar productos rápidamente para incentivar la producción.", correct: false },
+          { text: "La economía circular promueve el uso y aprovechamiento prolongado de los recursos mediante la reutilización y el reciclaje.", correct: true },
+          { text: "La economía circular se basa en la extracción continua de nuevos recursos naturales.", correct: false },
+          { text: "La economía circular favorece el consumo de productos de un solo uso para reducir costos.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué etapa del ciclo de vida de un producto incluye el transporte del producto desde el lugar de producción hasta el consumidor final?",
+        answers: [
+          { text: "Concepción y diseño", correct: false },
+          { text: "Producción", correct: false },
+          { text: "Distribución", correct: true },
+          { text: "Fin de la vida útil", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué ley regula el plan de sostenibilidad en España?",
+        answers: [
+          { text: "Ley 1/2023", correct: true },
+          { text: "Ley 50/2022", correct: false },
+          { text: "RD 1/2000", correct: false },
+          { text: "Ninguna es correcta", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué se utiliza para analizar los grupos de interés?",
+        answers: [
+          { text: "Benchmark", correct: false },
+          { text: "Matriz", correct: true },
+          { text: "Diagnóstico", correct: false },
+          { text: "Indicadores", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué significa el término Stakeholder?",
+        answers: [
+          { text: "Grupo de interés", correct: true },
+          { text: "Prosperidad", correct: false },
+          { text: "Financiación", correct: false },
+          { text: "Adaptación", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué tienen que hacer los sectores productivos para cumplir los ODS?",
+        answers: [
+          { text: "Aplicar los ODS en la estrategia empresarial", correct: true },
+          { text: "No promover prácticas sostenibles en la cadena de suministro y producción", correct: false },
+          { text: "Evitar la reducción de emisiones de gases de efecto invernadero", correct: false },
+          { text: "No colaborar con gobiernos, ONGs y las comunidades locales", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes no es un reto social?",
+        answers: [
+          { text: "Violencia y seguridad", correct: false },
+          { text: "Deforestación", correct: true },
+          { text: "Reto demográfico", correct: false },
+          { text: "Migración", correct: false }
+        ]
+      },
+      {
+        text: "De los siguientes, ¿qué se considera una oportunidad al conseguir y cumplir los ODS?",
+        answers: [
+          { text: "Falta de financiación", correct: false },
+          { text: "Dificultades de coordinación", correct: false },
+          { text: "Abrir nuevos mercados y oportunidades comerciales", correct: true },
+          { text: "Resistencia al cambio", correct: false }
+        ]
+      },
+      {
+        text: "El análisis sobre la situación actual de una empresa se denomina:",
+        answers: [
+          { text: "Análisis de Stakeholders", correct: false },
+          { text: "Análisis de materialidad", correct: false },
+          { text: "Análisis de diagnóstico inicial", correct: true },
+          { text: "Análisis de sostenibilidad", correct: false }
+        ]
+      },
+      {
+        text: "El diseño de un producto teniendo en cuenta el impacto ambiental se denomina:",
+        answers: [
+          { text: "Diseño sostenible", correct: false },
+          { text: "Ecodiseño", correct: true },
+          { text: "Rediseño", correct: false },
+          { text: "Diseño ambiental", correct: false }
+        ]
+      },
+      {
+        text: "El índice de Desarrollo humano:",
+        answers: [
+          { text: "Ofrece información sobre los gases de efecto invernadero", correct: false },
+          { text: "Evalúa el bienestar humano en términos de salud, educación y riqueza", correct: true },
+          { text: "Se mide la creación de valor económico de una empresa", correct: false },
+          { text: "Es un indicador económico", correct: false }
+        ]
+      },
+      {
+        text: "El primer paso en la elaboración de un plan de sostenibilidad es:",
+        answers: [
+          { text: "Compromiso de dirección", correct: true },
+          { text: "Plantear indicadores de desempeño", correct: false },
+          { text: "Análisis de diagnóstico inicial", correct: false },
+          { text: "Análisis de materialidad", correct: false }
+        ]
+      },
+      {
+        text: "El sistema capitalista no afecta directamente al cambio climático a causa de:",
+        answers: [
+          { text: "De la dependencia de combustibles fósiles", correct: false },
+          { text: "Del consumo de recursos naturales", correct: false },
+          { text: "Al acceso a la educación", correct: true },
+          { text: "Del modelo de producción lineal y consumo continuo", correct: false }
+        ]
+      },
+      {
+        text: "El uso de fuentes de energía renovables se promueve desde el ODS:",
+        answers: [
+          { text: "Trabajo decente y crecimiento económico", correct: false },
+          { text: "Reducción de las desigualdades", correct: false },
+          { text: "Energía asequible y no contaminante", correct: true },
+          { text: "Paz, justicia e instituciones sólidas", correct: false }
+        ]
+      },
+      {
+        text: "Entre la importancia de la colaboración entre sectores sociales y productivos, ¿a qué nos referimos cuando la colaboración lleva a cambios en el comportamiento individual y empresarial que contribuyen a la protección del medio ambiente?",
+        answers: [
+          { text: "A los incentivos económicos", correct: false },
+          { text: "Al desarrollo de políticas integrales", correct: false },
+          { text: "Al desarrollo de estándares y certificaciones", correct: false },
+          { text: "Educación y sensibilización", correct: true }
+        ]
+      },
+      {
+        text: "Entre las normativas actuales internacionales en materia de sostenibilidad se encuentra:",
+        answers: [
+          { text: "Agenda 2030", correct: false },
+          { text: "Acuerdo de París", correct: false },
+          { text: "Marco Estratégico de Energía y Clima", correct: false },
+          { text: "Todas son correctas", correct: true }
+        ]
+      },
+      {
+        text: "Es un indicador de sostenibilidad ambiental:",
+        answers: [
+          { text: "Huella de carbono", correct: true },
+          { text: "Índice de Desarrollo Humano", correct: false },
+          { text: "Valor Económico Generado y Distribuido", correct: false },
+          { text: "Ninguna es correcta", correct: false }
+        ]
+      },
+      {
+        text: "Hace referencia al cambio de un sistema de energía basado en combustibles fósiles:",
+        answers: [
+          { text: "Eficiencia sostenible", correct: false },
+          { text: "Movilidad energética", correct: false },
+          { text: "Eficiencia energética", correct: false },
+          { text: "Transición energética", correct: true }
+        ]
+      },
+      {
+        text: "Indica una de las causas que provocan la pérdida de biodiversidad:",
+        answers: [
+          { text: "La caza descontrolada", correct: true },
+          { text: "La tala de bosques", correct: false },
+          { text: "Los vertidos tóxicos", correct: false },
+          { text: "El aumento de gases contaminantes", correct: false }
+        ]
+      },
+      {
+        text: "La P que se centra en la protección del medio natural y de la adopción de medidas frente al cambio climático es:",
+        answers: [
+          { text: "Paz", correct: false },
+          { text: "Prosperidad", correct: false },
+          { text: "Personas", correct: false },
+          { text: "Planeta", correct: true }
+        ]
+      },
+      {
+        text: "Las medidas cuantitativas o cualitativas para evaluar el desempeño del plan de sostenibilidad en base a aspectos ambientales, económicos y sociales son:",
+        answers: [
+          { text: "Objetivos", correct: false },
+          { text: "Responsabilidades", correct: false },
+          { text: "Indicadores de sostenibilidad", correct: true },
+          { text: "Ninguna es correcta", correct: false }
+        ]
+      },
+      {
+        text: "Los aspectos ambientales se centran en evaluar:",
+        answers: [
+          { text: "El uso de recursos", correct: true },
+          { text: "Los derechos laborales", correct: false },
+          { text: "La gestión de riesgos", correct: false },
+          { text: "La garantía de salud y seguridad", correct: false }
+        ]
+      },
+      {
+        text: "No es un principio del ecodiseño:",
+        answers: [
+          { text: "Diseño de productos energéticamente eficientes", correct: false },
+          { text: "Diseño de productos que generan menos residuos y emisiones", correct: false },
+          { text: "Diseño de productos de un solo uso", correct: true },
+          { text: "Diseño de productos con materiales reciclables o renovables", correct: false }
+        ]
+      },
+      {
+        text: "Para la mejora del plan de sostenibilidad:",
+        answers: [
+          { text: "Se define un calendario con las fechas de evaluación del cumplimiento de objetivos", correct: false },
+          { text: "Se debe ofrecer información que permita aplicar medidas de mejora", correct: false },
+          { text: "Se debe hacer de forma anual para acumular información y emitir un informe final", correct: true },
+          { text: "Todas las respuestas son correctas", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué es la eficiencia energética?",
+        answers: [
+          { text: "Regular el uso de recursos naturales", correct: false },
+          { text: "Cambio de un sistema de energía basado en combustibles fósiles", correct: false },
+          { text: "Utilizar menos energía para realizar la misma tarea o producir el mismo resultado", correct: true },
+          { text: "Aumentar la conciencia y el conocimiento sobre los problemas ambientales", correct: false }
+        ]
+      },
+      {
+        text: "Se considera Stakeholder a:",
+        answers: [
+          { text: "Clientes", correct: false },
+          { text: "Accionistas", correct: false },
+          { text: "Competencia", correct: false },
+          { text: "Todas son correctas", correct: true }
+        ]
+      },
+      {
+        text: "Se define como pobreza extrema a aquellas situaciones en las que tienen:",
+        answers: [
+          { text: "Más de 2€ por persona al día para sobrevivir", correct: false },
+          { text: "Menos de 2€ por persona al día para sobrevivir", correct: true },
+          { text: "Menos de 20€ por persona a la semana para sobrevivir", correct: false },
+          { text: "Menos de 100€ por persona al mes para sobrevivir", correct: false }
+        ]
+      },
+      {
+        text: "Un beneficio asociado a la realización de un plan de sostenibilidad es:",
+        answers: [
+          { text: "Aumento de costes a medio y largo plazo", correct: false },
+          { text: "Aumento de residuos generados", correct: false },
+          { text: "Aumento de la demanda energética", correct: false },
+          { text: "Optimización de recursos", correct: true }
+        ]
+      },
+      {
+        text: "Una de las responsabilidades asociadas a la alta dirección es:",
+        answers: [
+          { text: "Coordinar los distintos departamentos o sectores de la empresa", correct: false },
+          { text: "Garantizar los recursos necesarios para aplicar el plan de sostenibilidad", correct: true },
+          { text: "Aplicar el plan de sostenibilidad", correct: false },
+          { text: "Conocer los criterios ASG de la empresa", correct: false }
+        ]
+      }
+    ];
+
+    // =====================================
+    // 2. LÓGICA DEL TEST
+    // =====================================
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const checkBtn = document.getElementById("checkBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsBox = document.getElementById("results");
+    const scoreText = document.getElementById("scoreText");
+    const detailText = document.getElementById("detailText");
+
+    let quizState = [];
+
+    function shuffleArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function buildQuiz() {
+      questionsContainer.innerHTML = "";
+      resultsBox.style.display = "none";
+      checkBtn.disabled = false;
+
+      quizState = questionsData.map((q, index) => {
+        const shuffledAnswers = shuffleArray([...q.answers]);
+        const questionId = "q" + index;
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.questionId = questionId;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const num = document.createElement("div");
+        num.className = "question-number";
+        num.textContent = "Pregunta " + (index + 1);
+
+        const text = document.createElement("div");
+        text.className = "question-text";
+        text.textContent = q.text;
+
+        header.appendChild(num);
+        header.appendChild(text);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        shuffledAnswers.forEach((ans, ansIndex) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = questionId;
+          input.value = ansIndex;
+          input.dataset.correct = ans.correct ? "true" : "false";
+
+          const span = document.createElement("span");
+          span.className = "answer-text";
+          span.textContent = ans.text;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          answersDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(answersDiv);
+        questionsContainer.appendChild(card);
+
+        return {
+          questionId,
+          element: card
+        };
+      });
+    }
+
+    function gradeQuiz() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      quizState.forEach((q) => {
+        const card = q.element;
+        const options = card.querySelectorAll(".answer-option");
+        let selectedInput = null;
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          opt.classList.remove("correct", "incorrect", "unselected-correct");
+          if (input.checked) selectedInput = input;
+        });
+
+        if (!selectedInput) {
+          unanswered++;
+        } else if (selectedInput.dataset.correct === "true") {
+          correctCount++;
+        }
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          input.disabled = true;
+
+          if (input.dataset.correct === "true" && input.checked) {
+            opt.classList.add("correct");
+          } else if (input.dataset.correct === "false" && input.checked) {
+            opt.classList.add("incorrect");
+          } else if (input.dataset.correct === "true" && !input.checked) {
+            opt.classList.add("unselected-correct");
+          }
+        });
+      });
+
+      const total = questionsData.length;
+      const percentage = (correctCount / total) * 100;
+
+      let gradeClass = "bad";
+      if (percentage >= 80) gradeClass = "good";
+      else if (percentage >= 50) gradeClass = "medium";
+
+      scoreText.className = "score " + gradeClass;
+      scoreText.textContent = `Resultado: ${correctCount} de ${total} (${percentage.toFixed(1)}%)`;
+
+      let detail = "";
+      if (unanswered > 0) {
+        detail += `Preguntas sin responder: ${unanswered}. `;
+      }
+      if (percentage >= 80) {
+        detail += "Muy buen trabajo, dominas el tema ✅";
+      } else if (percentage >= 50) {
+        detail += "Nada mal, pero puedes repasar algunos conceptos 👍";
+      } else {
+        detail += "Te conviene repasar el contenido antes del examen 📚";
+      }
+
+      detailText.textContent = detail;
+      resultsBox.style.display = "flex";
+      checkBtn.disabled = true;
+    }
+
+    checkBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", buildQuiz);
+
+    buildQuiz();
+  </script>
+</body>
+</html>
