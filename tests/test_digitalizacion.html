@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Digitalizaciçon aplicada a los sectores productivos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+  body {
+  background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+}
+
+   .app {
+  max-width: 900px;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.85),
+    rgba(245,245,245,0.8)
+  );
+  border-radius: 20px;
+  padding: 1.7rem 2rem;
+  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-bottom: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+ button {
+  border: none;
+  border-radius: 12px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button.primary {
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+}
+
+button.primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+}
+
+button.secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+button.secondary:hover {
+  transform: scale(1.05);
+  background: #d1d5db;
+}
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .question-card {
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-number {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #6b7280;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s, transform 0.05s;
+      cursor: pointer;
+    }
+
+    .answer-option:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .answer-option input {
+      margin-top: 0.15rem;
+      cursor: pointer;
+    }
+
+    .answer-text {
+      font-size: 0.9rem;
+    }
+
+    .answer-option.correct {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+    }
+
+    .answer-option.incorrect {
+      background: #fee2e2;
+      border: 1px solid #dc2626;
+    }
+
+    .answer-option.unselected-correct {
+      background: #ecfdf5;
+      border: 1px dashed #16a34a;
+    }
+
+    .results {
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .score {
+      font-weight: 600;
+    }
+
+    .score.good { color: #16a34a; }
+    .score.medium { color: #f59e0b; }
+    .score.bad { color: #dc2626; }
+
+    .info-text {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .app { padding: 1rem; border-radius: 0.75rem; }
+      .question-card { padding: 0.8rem 0.75rem; }
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.70);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Digitalización y Tecnologías Habilitadoras</h1>
+
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+    </div>
+
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      {
+        text: "¿Cómo pueden las THD contribuir a la sostenibilidad en el proceso de producción dentro de una economía circular?",
+        answers: [
+          { text: "Desarrollando aplicaciones móviles para facilitar la compra de productos.", correct: false },
+          { text: "Utilizando plataformas de e-learning para capacitar a trabajadores.", correct: false },
+          { text: "Mejorando la publicidad en línea para incrementar las ventas.", correct: false },
+          { text: "Implementando automatización y robótica para reducir el consumo de recursos y aumentar la eficiencia.", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes afirmaciones define mejor la digitalización en sistemas empresariales?",
+        answers: [
+          { text: "Solo incluye la automatización de procesos.", correct: false },
+          { text: "Se refiere exclusivamente al uso de software en las empresas.", correct: false },
+          { text: "Es la integración de tecnologías digitales en todos los aspectos/contextos de una empresa.", correct: true },
+          { text: "Se limita a la conversión de documentos en papel a formato digital.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes características de la digitalización se refiere a la conversión de documentos en papel a formato digital?",
+        answers: [
+          { text: "Automatización.", correct: false },
+          { text: "Conversión de recursos", correct: true },
+          { text: "Análisis de datos", correct: false },
+          { text: "Innovación", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes características del Big Data se refiere a la cantidad de datos generados por usuarios y dispositivos?",
+        answers: [
+          { text: "Veracidad", correct: false },
+          { text: "Velocidad", correct: false },
+          { text: "Volumen", correct: true },
+          { text: "Valor", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes características es común a los modelos IaaS y PaaS?",
+        answers: [
+          { text: "El uso compartido de recursos de infraestructura entre múltiples usuarios.", correct: true },
+          { text: "La integración de middleware para la operación de aplicaciones web.", correct: false },
+          { text: "La posibilidad de gestionar y configurar la infraestructura física y virtual.", correct: false },
+          { text: "La reducción de complejidad en el desarrollo de aplicaciones.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes tecnologías permite a los usuarios jugar a juegos en alta calidad sin necesidad de hardware de altas prestaciones?",
+        answers: [
+          { text: "Big Data.", correct: false },
+          { text: "Inteligencia Artificial.", correct: false },
+          { text: "Cloud Gaming", correct: true },
+          { text: "Realidad Aumentada", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes tecnologías se refiere a la interconexión de dispositivos físicos a través de internet?",
+        answers: [
+          { text: "Big Data", correct: false },
+          { text: "Internet of Things", correct: true },
+          { text: "Inteligencia Artificial", correct: false },
+          { text: "Biotecnología", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes avances se menciona como un hito importante en la etapa pre-digital?",
+        answers: [
+          { text: "La invención del teléfono", correct: false },
+          { text: "La creación de la computadora", correct: false },
+          { text: "La invención del telégrafo eléctrico", correct: true },
+          { text: "El desarrollo de Internet", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes componentes de las tecnologías de la información se refiere al equipamiento físico necesario para el procesamiento de datos?",
+        answers: [
+          { text: "Software.", correct: false },
+          { text: "Redes de comunicación", correct: false },
+          { text: "Seguridad en la información.", correct: false },
+          { text: "Hardware", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes componentes de las tecnologías de la operación se encarga de controlar y automatizar procesos industriales mediante la ejecución de programas?",
+        answers: [
+          { text: "Dispositivos de campo", correct: false },
+          { text: "Sistemas de Control de Supervisión y Adquisición de Datos (SCADA)", correct: false },
+          { text: "Sistemas de control industrial", correct: true },
+          { text: "Redes de comunicación industrial", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes lenguajes de programación es conocido por su sintaxis sencilla y su amplia gama de bibliotecas, siendo el más popular en el desarrollo de IA?",
+        answers: [
+          { text: "Java.", correct: false },
+          { text: "C++", correct: false },
+          { text: "Python", correct: true },
+          { text: "JavaScript", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de los siguientes ordenadores es considerado el primer ordenador electrónico?",
+        answers: [
+          { text: "Z1", correct: false },
+          { text: "ENIAC", correct: true },
+          { text: "Bombe", correct: false },
+          { text: "Enigma", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es el principal objetivo de la integración entre las tecnologías IT y OT en una empresa?",
+        answers: [
+          { text: "Aumentar el número de trabajadores", correct: false },
+          { text: "Interrelacionar la información de producción con los sistemas de gestión", correct: true },
+          { text: "Reducir el uso de tecnología", correct: false },
+          { text: "Eliminar la necesidad de supervisión", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es la diferencia principal entre una economía lineal y una economía circular?",
+        answers: [
+          { text: "La economía lineal optimiza el uso de recursos mientras que la economía circular se basa en el reciclaje.", correct: false },
+          { text: "La economía lineal sigue un flujo unidireccional de recursos, mientras que la economía circular incorpora el concepto de reducir, reutilizar y reciclar.", correct: true },
+          { text: "La economía circular depende de la producción masiva mientras que la economía lineal se basa en la sostenibilidad.", correct: false },
+          { text: "La economía lineal solo se aplica a sectores industriales, mientras que la economía circular se enfoca en el consumo de bienes.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es la principal función de definir objetivos en un proyecto de transformación digital?",
+        answers: [
+          { text: "Aumentar la inversión en tecnología", correct: false },
+          { text: "Establecer un rumbo estratégico para la empresa", correct: true },
+          { text: "Reducir el número de empleados", correct: false },
+          { text: "Minimizar el uso de tecnologías digitales", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es una característica clave de los sistemas SaaS en comparación con IaaS y PaaS?",
+        answers: [
+          { text: "Ofrecen una mayor capacidad de personalización de la infraestructura subyacente.", correct: false },
+          { text: "Facilitan la gestión de bases de datos y software de middleware.", correct: false },
+          { text: "Requieren una instalación y configuración complejas.", correct: false },
+          { text: "Son aplicaciones listas para usar sin necesidad de instalación ni configuración adicional.", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuál es una de las aplicaciones de los drones en la industria?",
+        answers: [
+          { text: "Realizar entregas de productos", correct: false },
+          { text: "Detectar averías en equipos mediante captura termográfica", correct: true },
+          { text: "Cultivar campos de forma autónoma", correct: false },
+          { text: "Programar robots de aplicación específica", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es una de las características clave de la tecnología Blockchain?",
+        answers: [
+          { text: "Centralización en un servidor principal.", correct: false },
+          { text: "Transparencia y trazabilidad en todas las transacciones.", correct: true },
+          { text: "Almacenamiento de datos en un solo lugar.", correct: false },
+          { text: "Exclusividad para el uso de criptomonedas.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es uno de los aspectos clave que se debe revisar y ajustar durante el seguimiento continuo de un proyecto?",
+        answers: [
+          { text: "La estructura organizativa", correct: false },
+          { text: "Las metas y KPIs", correct: true },
+          { text: "La ubicación de la empresa", correct: false },
+          { text: "El número de empleados", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál es uno de los beneficios principales de la digitalización en el sector del medio ambiente?",
+        answers: [
+          { text: "Reducción en la utilización de recursos materiales y energéticos.", correct: true },
+          { text: "Incremento en el uso de recursos naturales.", correct: false },
+          { text: "Aumento en la dependencia de combustibles fósiles.", correct: false },
+          { text: "Expansión del uso de papel en las oficinas.", correct: false }
+        ]
+      },
+      {
+        text: "¿Por qué es importante revisar y ajustar los KPIs durante un proyecto de transformación digital?",
+        answers: [
+          { text: "Para evitar la implementación de nueva tecnología.", correct: false },
+          { text: "Para reducir el número de empleados gracias a la digitalización", correct: false },
+          { text: "Para aumentar el presupuesto del proyecto.", correct: false },
+          { text: "Para asegurarnos de que siguen alineados con los objetivos actuales del proyecto y reflejan con precisión los resultados esperados.", correct: true }
+        ]
+      },
+      {
+        text: "¿Qué área ha contribuido significativamente al desarrollo de la Inteligencia Artificial permitiendo a los sistemas aprender a partir de la experiencia y los datos?",
+        answers: [
+          { text: "Procesamiento del lenguaje natural", correct: false },
+          { text: "Machine Learning", correct: true },
+          { text: "Reconocimiento de voz", correct: false },
+          { text: "Conducción autónoma", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué aspecto de la digitalización permite a las empresas mejorar su capacidad de respuesta y adaptabilidad al mercado?",
+        answers: [
+          { text: "El análisis de datos mediante Big Data.", correct: true },
+          { text: "La reducción del tamaño de los ordenadores.", correct: false },
+          { text: "La invención del transistor.", correct: false },
+          { text: "El uso de teléfonos inteligentes.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué diferencia principal existe entre la IA débil y la IA fuerte?",
+        answers: [
+          { text: "La IA fuerte puede aprender de manera autónoma y generalizada.", correct: true },
+          { text: "La IA débil puede realizar cualquier tarea cognitiva", correct: false },
+          { text: "La IA fuerte solo se especializa en tareas muy concretas", correct: false },
+          { text: "La IA débil tiene capacidad de razonamiento profundo", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué dispositivo, inventado en 1947, es considerado el mayor invento del siglo XX y permitió la construcción de circuitos integrados?",
+        answers: [
+          { text: "Microprocesador", correct: false },
+          { text: "Transistor", correct: true },
+          { text: "Ordenador personal", correct: false },
+          { text: "Smartphone", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué es el Test de Turing?",
+        answers: [
+          { text: "Un examen para medir la inteligencia humana.", correct: false },
+          { text: "Un test para evaluar el rendimiento de los sistemas informáticos.", correct: false },
+          { text: "Una prueba para determinar si un ordenador puede pensar como un humano.", correct: true },
+          { text: "Un método para programar algoritmos de IA.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué es Infraestructura como Servicio (IaaS) en el contexto de Cloud Computing?",
+        answers: [
+          { text: "Un servicio que proporciona software para el desarrollo de aplicaciones sin necesidad de gestionar la infraestructura subyacente.", correct: false },
+          { text: "Un modelo que ofrece hardware virtualizado, almacenamiento y redes a través de internet, permitiendo a los usuarios gestionar y configurar su propia infraestructura.", correct: true },
+          { text: "Una plataforma que facilita la creación de aplicaciones web mediante entornos de desarrollo integrados.", correct: false },
+          { text: "Un servicio que proporciona herramientas para la gestión de bases de datos en la nube.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué evento marcó el inicio de la era digital tal y como la conocemos hoy en día?",
+        answers: [
+          { text: "La invención del telégrafo eléctrico en 1837.", correct: false },
+          { text: "La aparición del primer ordenador electrónico, el ENIAC, en los años 40.", correct: true },
+          { text: "El desarrollo de la teoría unificada de la electricidad y el magnetismo en 1861.", correct: false },
+          { text: "La invención de la radio en 1898.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué función cumplen los sistemas SCADA en el entorno de las Tecnologías de Operación (OT)?",
+        answers: [
+          { text: "Realizan el mantenimiento preventivo de equipos industriales.", correct: false },
+          { text: "Permiten la supervisión y control de procesos industriales para asegurar su correcto funcionamiento.", correct: true },
+          { text: "Generan electricidad en plantas industriales.", correct: false },
+          { text: "Almacenan productos terminados en almacenes automatizados.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué herramienta se utiliza para analizar los factores externos que afectan a la empresa, como tendencias tecnológicas y regulaciones?",
+        answers: [
+          { text: "Análisis DAFO", correct: false },
+          { text: "Análisis PESTEL", correct: true },
+          { text: "Análisis FODA", correct: false },
+          { text: "Análisis de las Cinco Fuerzas de Porter", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué impacto ha tenido la digitalización en el sector financiero?",
+        answers: [
+          { text: "La reducción en la cantidad de transacciones electrónicas.", correct: false },
+          { text: "El aumento de sucursales bancarias físicas.", correct: false },
+          { text: "La aparición de medios de pago digitales y banca sin sedes físicas.", correct: true },
+          { text: "La eliminación total de la banca tradicional.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué modelo de facturación se utiliza comúnmente en IaaS para el uso de computación y almacenamiento?",
+        answers: [
+          { text: "Pago único", correct: false },
+          { text: "Horaria o mensual", correct: true },
+          { text: "Anual", correct: false },
+          { text: "Por usuario", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué permite el modelo de Plataforma como Servicio (PaaS) a los desarrolladores?",
+        answers: [
+          { text: "Acceso a hardware físico", correct: false },
+          { text: "Desarrollo, creación y gestión de aplicaciones sin preocuparse por la infraestructura", correct: true },
+          { text: "Almacenamiento de grandes volúmenes de datos", correct: false },
+          { text: "Conexión a internet de alta velocidad", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué tecnología es comúnmente utilizada para la transmisión de datos en los contadores eléctricos?",
+        answers: [
+          { text: "Tecnología de reconocimiento facial.", correct: false },
+          { text: "Tecnología de impresión 3D.", correct: false },
+          { text: "Tecnología LoRa y WiFi.", correct: true },
+          { text: "Tecnología de edición genética.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué tecnología se utiliza en la conducción autónoma para identificar obstáculos y señales externas?",
+        answers: [
+          { text: "Big Data", correct: true },
+          { text: "Realidad Aumentada.", correct: false },
+          { text: "Biotecnología", correct: false },
+          { text: "Fabricación aditiva", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué término describe la diferencia en el acceso y uso de tecnologías digitales entre diferentes generaciones?",
+        answers: [
+          { text: "Brecha digital generacional.", correct: true },
+          { text: "Ciberseguridad", correct: false },
+          { text: "Automatización de procesos.", correct: false },
+          { text: "Transformación digital.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué término se utiliza para referirse al acceso y procesamiento de archivos informáticos a través de internet?",
+        answers: [
+          { text: "Big Data.", correct: false },
+          { text: "Cloud Computing", correct: true },
+          { text: "Inteligencia Artificial", correct: false },
+          { text: "Internet of Things.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué ventaja principal ofrece el Fog Computing en comparación con el Edge Computing?",
+        answers: [
+          { text: "Procesamiento en el borde de la red para minimizar la latencia", correct: false },
+          { text: "Intermediación en el procesamiento de datos entre los dispositivos finales y la nube, reduciendo la latencia y optimizando la red.", correct: true },
+          { text: "Computación directamente en los dispositivos finales para respuesta instantánea.", correct: false },
+          { text: "Procesamiento y análisis de datos en la nube con recursos altamente escalables.", correct: false }
+        ]
+      },
+      {
+        text: "¿Quiénes son considerados los padres de la Inteligencia Artificial?",
+        answers: [
+          { text: "Alan Turing y John McCarthy", correct: true },
+          { text: "Alan Turing y Herbert Simon", correct: false },
+          { text: "John McCarthy y Marvin Minsky", correct: false },
+          { text: "Marvin Minsky y Herbert Simon", correct: false }
+        ]
+      },
+      {
+        text: "En el análisis de las Cinco Fuerzas de Porter, ¿qué aspecto se refiere a la intensidad de la competencia existente en el mercado?",
+        answers: [
+          { text: "Rivalidad entre competidores existentes", correct: true },
+          { text: "Poder de negociación de los clientes", correct: false },
+          { text: "Amenaza de nuevos entrantes", correct: false },
+          { text: "Amenaza de productos sustitutos", correct: false }
+        ]
+      }
+    ];
+
+    // =====================================
+    // LÓGICA DEL TEST
+    // =====================================
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const checkBtn = document.getElementById("checkBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsBox = document.getElementById("results");
+    const scoreText = document.getElementById("scoreText");
+    const detailText = document.getElementById("detailText");
+
+    let quizState = [];
+
+    function shuffleArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function buildQuiz() {
+      questionsContainer.innerHTML = "";
+      resultsBox.style.display = "none";
+      checkBtn.disabled = false;
+
+      quizState = questionsData.map((q, index) => {
+        const shuffledAnswers = shuffleArray([...q.answers]);
+        const questionId = "q" + index;
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.questionId = questionId;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const num = document.createElement("div");
+        num.className = "question-number";
+        num.textContent = "Pregunta " + (index + 1);
+
+        const text = document.createElement("div");
+        text.className = "question-text";
+        text.textContent = q.text;
+
+        header.appendChild(num);
+        header.appendChild(text);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        shuffledAnswers.forEach((ans, ansIndex) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = questionId;
+          input.value = ansIndex;
+          input.dataset.correct = ans.correct ? "true" : "false";
+
+          const span = document.createElement("span");
+          span.className = "answer-text";
+          span.textContent = ans.text;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          answersDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(answersDiv);
+        questionsContainer.appendChild(card);
+
+        return { questionId, element: card };
+      });
+    }
+
+    function gradeQuiz() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      quizState.forEach((q) => {
+        const card = q.element;
+        const options = card.querySelectorAll(".answer-option");
+        let selectedInput = null;
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          opt.classList.remove("correct", "incorrect", "unselected-correct");
+          if (input.checked) selectedInput = input;
+        });
+
+        if (!selectedInput) {
+          unanswered++;
+        } else if (selectedInput.dataset.correct === "true") {
+          correctCount++;
+        }
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          input.disabled = true;
+
+          if (input.dataset.correct === "true" && input.checked) {
+            opt.classList.add("correct");
+          } else if (input.dataset.correct === "false" && input.checked) {
+            opt.classList.add("incorrect");
+          } else if (input.dataset.correct === "true" && !input.checked) {
+            opt.classList.add("unselected-correct");
+          }
+        });
+      });
+
+      const total = questionsData.length;
+      const percentage = (correctCount / total) * 100;
+
+      let gradeClass = "bad";
+      if (percentage >= 80) gradeClass = "good";
+      else if (percentage >= 50) gradeClass = "medium";
+
+      scoreText.className = "score " + gradeClass;
+      scoreText.textContent = `Resultado: ${correctCount} de ${total} (${percentage.toFixed(1)}%)`;
+
+      let detail = "";
+      if (unanswered > 0) detail += `Preguntas sin responder: ${unanswered}. `;
+      if (percentage >= 80) detail += "Muy buen trabajo, dominas el tema ✅";
+      else if (percentage >= 50) detail += "Nada mal, pero puedes repasar algunos conceptos 👍";
+      else detail += "Te conviene repasar el contenido antes del examen 📚";
+
+      detailText.textContent = detail;
+      resultsBox.style.display = "flex";
+      checkBtn.disabled = true;
+    }
+
+    checkBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", buildQuiz);
+
+    buildQuiz();
+  </script>
+</body>
+</html>
