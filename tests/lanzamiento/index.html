@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lanzamiento de productos y servicios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+  body {
+  background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+}
+
+   .app {
+  max-width: 900px;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.85),
+    rgba(245,245,245,0.8)
+  );
+  border-radius: 20px;
+  padding: 1.7rem 2rem;
+  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+    }
+
+    button.primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.secondary:hover {
+      transform: scale(1.05);
+      background: #d1d5db;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .question-card {
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-number {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #6b7280;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s, transform 0.05s;
+      cursor: pointer;
+    }
+
+    .answer-option:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .answer-option input {
+      margin-top: 0.15rem;
+      cursor: pointer;
+    }
+
+    .answer-text {
+      font-size: 0.9rem;
+    }
+
+    .answer-option.correct {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+    }
+
+    .answer-option.incorrect {
+      background: #fee2e2;
+      border: 1px solid #dc2626;
+    }
+
+    .answer-option.unselected-correct {
+      background: #ecfdf5;
+      border: 1px dashed #16a34a;
+    }
+
+    .results {
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .score { font-weight: 600; }
+    .score.good { color: #16a34a; }
+    .score.medium { color: #f59e0b; }
+    .score.bad { color: #dc2626; }
+
+    @media (max-width: 640px) {
+      .app { padding: 1rem; border-radius: 0.75rem; }
+      .question-card { padding: 0.8rem 0.75rem; }
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.70);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Lanzamiento de productos y servicios</h1>
+
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+    </div>
+
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      {
+        text: "¿Cómo se definen las áreas del comercio en que existe un nivel de ventas superior a la media que existe en todo el establecimiento?",
+        answers: [
+          { text: "Zonas frías.", correct: false },
+          { text: "Zonas calientes.", correct: true },
+          { text: "Zonas clave.", correct: false },
+          { text: "Zonas templadas.", correct: false }
+        ]
+      },
+      {
+        text: "¿Cómo se denomina la división de la totalidad de un mercado de un bien o servicio determinado en subconjuntos más reducidos que cuentan con características, necesidades o comportamientos similares?",
+        answers: [
+          { text: "Organización estructural", correct: false },
+          { text: "Segmentación del mercado", correct: true },
+          { text: "Estructuración del mercado", correct: false },
+          { text: "Segmentación estructural", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes no es una limitación del método DAFO?",
+        answers: [
+          { text: "Escasa autocrítica.", correct: false },
+          { text: "Uso de fortalezas imprecisas.", correct: false },
+          { text: "Falta de ponderación.", correct: false },
+          { text: "Imagen desactualizada.", correct: true }
+        ]
+      },
+      {
+        text: "¿Cuál es la zona del establecimiento que obtiene menos ventas?",
+        answers: [
+          { text: "Zona caliente", correct: false },
+          { text: "Zona fría", correct: true },
+          { text: "Zona de acceso", correct: false },
+          { text: "Zona iluminada", correct: false }
+        ]
+      },
+      {
+        text: "¿El brainstorming desarrolla el surgimiento de ideas de forma organizada y rígida?",
+        answers: [
+          { text: "Sí", correct: false },
+          { text: "Sí, de forma extremadamente rígida", correct: false },
+          { text: "No", correct: true },
+          { text: "A veces", correct: false }
+        ]
+      },
+      {
+        text: "¿En base a qué se generan las ideas en la técnica SCAMPER?",
+        answers: [
+          { text: "A las respuestas que se redacten respecto a una serie de preguntas previamente determinadas.", correct: true },
+          { text: "A las respuestas que se redacten respecto a una serie de preguntas que surgen de forma espontánea.", correct: false },
+          { text: "A las preguntas que se redacten respecto a una serie de temas previamente determinados.", correct: false },
+          { text: "Se basan únicamente en ideas intuitivas sin ningún tipo de guía.", correct: false }
+        ]
+      },
+      {
+        text: "¿En cuál de los siguientes casos no se puede llevar a cabo la venta en liquidación?",
+        answers: [
+          { text: "Cese parcial o total de la actividad del establecimiento.", correct: false },
+          { text: "Reorientación significativa del negocio.", correct: false },
+          { text: "Cambios de temporada o de campaña.", correct: true },
+          { text: "Realización de obras importantes en el local comercial.", correct: false }
+        ]
+      },
+      {
+        text: "¿En qué tres grupos clasifica los productos el sistema ABC?",
+        answers: [
+          { text: "Capacidad próxima, media o cercana.", correct: false },
+          { text: "Ventas grandes, medias o bajas.", correct: true },
+          { text: "Tamaño grande, mediano o pequeño.", correct: false },
+          { text: "Coste fijo, coste variable y coste mixto", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué finalidad busca la implantación de un CRM?",
+        answers: [
+          { text: "Incrementar, en la mayor medida posible, el valor que la empresa obtiene del cliente a lo largo del ciclo de su relación con la entidad.", correct: true },
+          { text: "Incrementar el número de mercados en los que la empresa actúa.", correct: false },
+          { text: "Desarrollar una organización empresarial más cercana al cliente.", correct: false },
+          { text: "Mejorar únicamente los procesos de producción interna sin considerar al cliente.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué implica la implantación de un CRM?",
+        answers: [
+          { text: "El interés de la empresa por las nuevas tecnologías", correct: false },
+          { text: "El deseo de la empresa de reducir sus gastos generales", correct: false },
+          { text: "La consideración de la figura del cliente como centro de la actividad empresarial", correct: true },
+          { text: "La reorganización completa de los departamentos de producción.", correct: false }
+        ]
+      },
+      {
+        text: "¿Qué nombre recibe también el principio de Pareto?",
+        answers: [
+          { text: "70/30", correct: false },
+          { text: "60/40", correct: false },
+          { text: "80/20", correct: true },
+          { text: "70/20", correct: false }
+        ]
+      },
+      {
+        text: "¿Cuál de las siguientes opciones NO es un subsistema que forma parte del SIM?",
+        answers: [
+          { text: "Subsistema de datos internos.", correct: false },
+          { text: "Subsistema de inteligencia de marketing", correct: false },
+          { text: "Subsistema de investigación comercial y de apoyo a las decisiones de marketing.", correct: false },
+          { text: "Sistema financiero externo de la empresa.", correct: true }
+        ]
+      },
+      {
+        text: "Antes de acudir a una feria comercial:",
+        answers: [
+          { text: "Debe analizarse el perfil de los clientes que asistirán", correct: true },
+          { text: "No importa conocer el perfil de los clientes asistentes", correct: false },
+          { text: "No es posible conocer el perfil de los clientes que pueden asistir", correct: false },
+          { text: "No es necesario conocer el perfil de los clientes asistentes", correct: false }
+        ]
+      },
+      {
+        text: "Comprar un paraguas en caso de lluvia, se considera un bien:",
+        answers: [
+          { text: "De empleo habitual", correct: false },
+          { text: "De compra impulsiva", correct: false },
+          { text: "De emergencia", correct: true },
+          { text: "De comparación uniforme", correct: false }
+        ]
+      },
+      {
+        text: "De acuerdo con la matriz BCG, ¿cómo se denominan los productos que cuentan con una importante posición relativa en el mercado, pero se encuentran en un sector de crecimiento limitado?",
+        answers: [
+          { text: "Vacas lecheras", correct: true },
+          { text: "Perros", correct: false },
+          { text: "Estrella", correct: false },
+          { text: "Interrogantes", correct: false }
+        ]
+      },
+      {
+        text: "Del análisis PEST se deriva la existencia de diversos entornos. En concreto de:",
+        answers: [
+          { text: "Dos", correct: false },
+          { text: "Cuatro", correct: true },
+          { text: "Seis", correct: false },
+          { text: "Tres", correct: false }
+        ]
+      },
+      {
+        text: "Dentro del surtido comercial podremos distinguir las siguientes magnitudes:",
+        answers: [
+          { text: "Amplitud, profundidad, anchura y estructuración.", correct: true },
+          { text: "Longitud, reflexividad, anchura y estructuración.", correct: false },
+          { text: "Amplitud, profundidad, holgura y estructuración.", correct: false },
+          { text: "Amplitud, profundidad, anchura y reestructuración.", correct: false }
+        ]
+      },
+      {
+        text: "El análisis PEST profundiza en:",
+        answers: [
+          { text: "Las variables internas y las variables externas.", correct: false },
+          { text: "Los factores políticos, económicos, sociales y tecnológicos.", correct: true },
+          { text: "El mercado específico de la empresa.", correct: false },
+          { text: "Las variables sociales, psicográficas, organizativas y del mercado.", correct: false }
+        ]
+      },
+      {
+        text: "El boca-oreja es:",
+        answers: [
+          { text: "Una técnica de promoción en el ámbito de la medicina.", correct: false },
+          { text: "Cuando los clientes hablan de la empresa.", correct: true },
+          { text: "Las recomendaciones que se realizan en anuncios publicitarios.", correct: false },
+          { text: "Una estrategia basada en descuentos masivos", correct: false }
+        ]
+      },
+      {
+        text: "El briefing está compuesto de:",
+        answers: [
+          { text: "Objetivos y características del elemento a publicitar.", correct: false },
+          { text: "Público y mercado objetivo.", correct: false },
+          { text: "Estrategias de marketing, comunicación, creativa y de medios.", correct: false },
+          { text: "Todas son correctas.", correct: true }
+        ]
+      },
+      {
+        text: "El comportamiento asertivo implica:",
+        answers: [
+          { text: "Detectar las demandas del cliente.", correct: false },
+          { text: "Entender y compartir el mensaje.", correct: false },
+          { text: "Asentir ante las exigencias del cliente y asimilar sus imposiciones.", correct: false },
+          { text: "Actuar y comunicar de manera sincera, directa y templada.", correct: true }
+        ]
+      },
+      {
+        text: "El documento de la Comisión Europea que define las actividades que cuentan con una alta probabilidad de crear numerosos puestos de trabajo, se denomina:",
+        answers: [
+          { text: "Directiva Europea sobre Nuevos Yacimientos de Empleo.", correct: false },
+          { text: "RGDP de la Unión Europea.", correct: false },
+          { text: "Libro Blanco de Delors.", correct: true },
+          { text: "Informe de la Comisión Europea sobre Crecimiento, Empleo y Formación.", correct: false }
+        ]
+      },
+      {
+        text: "El pensamiento irradiante:",
+        answers: [
+          { text: "Se fundamenta en la idea de que el cerebro piensa de manera lineal.", correct: false },
+          { text: "Presenta las ideas a través de estímulos sociales.", correct: false },
+          { text: "Invita a usar las palabras para fomentar la creatividad.", correct: false },
+          { text: "Ninguna es correcta.", correct: true }
+        ]
+      },
+      {
+        text: "El servicio de atención al cliente, el seguimiento posventa y la gestión de quejas son:",
+        answers: [
+          { text: "Acciones destinadas a potenciar la fidelización del cliente.", correct: true },
+          { text: "Procesos exclusivos del departamento de logística.", correct: false },
+          { text: "Actividades orientadas únicamente a la captación de nuevos clientes.", correct: false },
+          { text: "Tareas relacionadas con la publicidad en medios digitales.", correct: false }
+        ]
+      },
+      {
+        text: "En el análisis DAFO, ¿las fortalezas y debilidades son variables internas relativas a la empresa?",
+        answers: [
+          { text: "Sí", correct: true },
+          { text: "No", correct: false },
+          { text: "Solo las fortalezas", correct: false },
+          { text: "Solo las debilidades", correct: false }
+        ]
+      },
+      {
+        text: "En referencia al surtido, ¿qué representa la cantidad de productos diferentes que satisfacen la misma necesidad?",
+        answers: [
+          { text: "Anchura", correct: false },
+          { text: "Profundidad", correct: true },
+          { text: "Amplitud", correct: false },
+          { text: "Estructuración", correct: false }
+        ]
+      },
+      {
+        text: "En un comercio, ¿qué determina el porcentaje de clientes que, de entre los que se han parado delante de un cierto producto, finalmente han optado por adquirir el mismo?",
+        answers: [
+          { text: "Índice de rentabilidad.", correct: false },
+          { text: "Índice de atención.", correct: false },
+          { text: "Índice de compra.", correct: true },
+          { text: "Índice de productividad.", correct: false }
+        ]
+      },
+      {
+        text: "La atención a la infancia, los servicios a domicilio, las nuevas tecnologías de la información o la comunicación y prevención de riesgos laborales son yacimientos de empleo pertenecientes a:",
+        answers: [
+          { text: "Los servicios de la vida cotidiana.", correct: true },
+          { text: "Los servicios de ocio.", correct: false },
+          { text: "Los servicios de mejora de la calidad de vida.", correct: false },
+          { text: "Los servicios de atención personal.", correct: false }
+        ]
+      },
+      {
+        text: "La capacidad de percibir lo que el interlocutor está comunicando y compartir los sentimientos que está expresando se conoce como:",
+        answers: [
+          { text: "Asertividad", correct: false },
+          { text: "Empatía", correct: true },
+          { text: "Escucha activa", correct: false },
+          { text: "Retroalimentación comercial", correct: false }
+        ]
+      },
+      {
+        text: "La clasificación de productos en función de su hábito de compra comprende los:",
+        answers: [
+          { text: "De empleo habitual, de compra impulsiva, de emergencia, de comparación uniforme, de comparación no uniforme o de especialidad.", correct: true },
+          { text: "De empleo habitual, de compra impulsiva, fungibles, de comparación uniforme, de comparación no uniforme o de especialidad.", correct: false },
+          { text: "De empleo habitual, infungibles, de emergencia, de comparación uniforme, de comparación no uniforme o de especialidad.", correct: false },
+          { text: "De empleo habitual, infungibles, fungibles, de comparación uniforme, de comparación no uniforme o de especialidad.", correct: false }
+        ]
+      },
+      {
+        text: "La fidelidad de un cliente hace referencia a una relación:",
+        answers: [
+          { text: "Estrictamente comercial.", correct: false },
+          { text: "Que supera lo estrictamente comercial.", correct: true },
+          { text: "Totalmente ajena a lo estrictamente comercial.", correct: false },
+          { text: "Estrictamente cordial.", correct: false }
+        ]
+      },
+      {
+        text: "La información necesaria para elaborar un mensaje publicitario viene recogida en:",
+        answers: [
+          { text: "El factoring.", correct: false },
+          { text: "El briefing.", correct: true },
+          { text: "El marketing mix", correct: false },
+          { text: "El confirming", correct: false }
+        ]
+      },
+      {
+        text: "La segmentación no diferenciada se utiliza cuando:",
+        answers: [
+          { text: "Se pretende extraer un mayor beneficio de los segmentos.", correct: false },
+          { text: "Se lanza un producto novedoso que no tiene competencia.", correct: true },
+          { text: "No se dispone de los medios suficientes para abordar a la totalidad de consumidores.", correct: false },
+          { text: "Se busca ofrecer un producto diferente para cada tipo de consumidor.", correct: false }
+        ]
+      },
+      {
+        text: "Las promociones orientadas a la fidelización más usuales son:",
+        answers: [
+          { text: "Posicionamiento web.", correct: false },
+          { text: "Captación mediante prescriptores.", correct: false },
+          { text: "Promociones periódicas.", correct: false },
+          { text: "Todas las anteriores son correctas.", correct: true }
+        ]
+      },
+      {
+        text: "Los beneficios del CRM se ponen de manifiesto, principalmente, en las áreas de:",
+        answers: [
+          { text: "Información, segmentación, marketing, ventas y comunicación.", correct: true },
+          { text: "Producción, distribución, ventas y promoción.", correct: false },
+          { text: "Marketing, promoción, comunicación y publicidad.", correct: false },
+          { text: "El CRM es una herramienta de gestión cotidiana sin impacto en un área concreta.", correct: false }
+        ]
+      },
+      {
+        text: "Los productos vaca lechera:",
+        answers: [
+          { text: "No alcanzan la madurez tras su fase de crecimiento.", correct: false },
+          { text: "Demandan importantes inversiones en acciones de marketing y desarrollo.", correct: false },
+          { text: "Dan como resultado un flujo de caja prácticamente neutro.", correct: false },
+          { text: "Ninguna es correcta.", correct: true }
+        ]
+      },
+      {
+        text: "Para concretar el mensaje que se utilizará en la campaña de comunicación:",
+        answers: [
+          { text: "Hay que cumplir la fórmula AIDA.", correct: false },
+          { text: "Hay que ajustarse a las características del público objetivo.", correct: false },
+          { text: "La redacción tiene que ser clara y concisa.", correct: false },
+          { text: "Todas son correctas.", correct: true }
+        ]
+      },
+      {
+        text: "Para elaborar el argumentario de ventas, el primer paso es:",
+        answers: [
+          { text: "Seleccionar las técnicas de respuesta a las objeciones.", correct: false },
+          { text: "Conocer las características del cliente.", correct: true },
+          { text: "Seleccionar las técnicas de venta.", correct: false },
+          { text: "Analizar el historial de compras del cliente.", correct: false }
+        ]
+      },
+      {
+        text: "Se pueden vender en rebajas artículos que previamente a las mismas no se ofertaban en el comercio:",
+        answers: [
+          { text: "Sí", correct: false },
+          { text: "No", correct: true },
+          { text: "Solo si se venden a un precio muy reducido", correct: false },
+          { text: "A veces", correct: false }
+        ]
+      },
+      {
+        text: "Respecto a los niveles de colocación de los productos en el comercio:",
+        answers: [
+          { text: "El superior requiere que el cliente se acerque mucho para llevarse el producto", correct: false },
+          { text: "El intermedio es adecuado para la compra impulsiva", correct: false },
+          { text: "El inferior se encuentra en un lugar cómodo para su recogida", correct: false },
+          { text: "El nivel ojos es adecuado para productos de interés por rentabilidad o margen", correct: true }
+        ]
+      }
+    ];
+
+    // =====================================
+    // LÓGICA DEL TEST
+    // =====================================
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const checkBtn = document.getElementById("checkBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsBox = document.getElementById("results");
+    const scoreText = document.getElementById("scoreText");
+    const detailText = document.getElementById("detailText");
+
+    let quizState = [];
+
+    function shuffleArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function buildQuiz() {
+      questionsContainer.innerHTML = "";
+      resultsBox.style.display = "none";
+      checkBtn.disabled = false;
+
+      quizState = questionsData.map((q, index) => {
+        const shuffledAnswers = shuffleArray([...q.answers]);
+        const questionId = "q" + index;
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.questionId = questionId;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const num = document.createElement("div");
+        num.className = "question-number";
+        num.textContent = "Pregunta " + (index + 1);
+
+        const text = document.createElement("div");
+        text.className = "question-text";
+        text.textContent = q.text;
+
+        header.appendChild(num);
+        header.appendChild(text);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        shuffledAnswers.forEach((ans, ansIndex) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = questionId;
+          input.value = ansIndex;
+          input.dataset.correct = ans.correct ? "true" : "false";
+
+          const span = document.createElement("span");
+          span.className = "answer-text";
+          span.textContent = ans.text;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          answersDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(answersDiv);
+        questionsContainer.appendChild(card);
+
+        return { questionId, element: card };
+      });
+    }
+
+    function gradeQuiz() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      quizState.forEach((q) => {
+        const card = q.element;
+        const options = card.querySelectorAll(".answer-option");
+        let selectedInput = null;
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          opt.classList.remove("correct", "incorrect", "unselected-correct");
+          if (input.checked) selectedInput = input;
+        });
+
+        if (!selectedInput) {
+          unanswered++;
+        } else if (selectedInput.dataset.correct === "true") {
+          correctCount++;
+        }
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          input.disabled = true;
+
+          if (input.dataset.correct === "true" && input.checked) {
+            opt.classList.add("correct");
+          } else if (input.dataset.correct === "false" && input.checked) {
+            opt.classList.add("incorrect");
+          } else if (input.dataset.correct === "true" && !input.checked) {
+            opt.classList.add("unselected-correct");
+          }
+        });
+      });
+
+      const total = questionsData.length;
+      const percentage = (correctCount / total) * 100;
+
+      let gradeClass = "bad";
+      if (percentage >= 80) gradeClass = "good";
+      else if (percentage >= 50) gradeClass = "medium";
+
+      scoreText.className = "score " + gradeClass;
+      scoreText.textContent = `Resultado: ${correctCount} de ${total} (${percentage.toFixed(1)}%)`;
+
+      let detail = "";
+      if (unanswered > 0) detail += `Preguntas sin responder: ${unanswered}. `;
+      if (percentage >= 80) detail += "Muy buen trabajo, dominas el tema ✅";
+      else if (percentage >= 50) detail += "Nada mal, pero puedes repasar algunos conceptos 👍";
+      else detail += "Te conviene repasar el contenido antes del examen 📚";
+
+      detailText.textContent = detail;
+      resultsBox.style.display = "flex";
+      checkBtn.disabled = true;
+    }
+
+    checkBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", buildQuiz);
+
+    buildQuiz();
+  </script>
+</body>
+</html>
