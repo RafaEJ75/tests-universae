@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <title>Llengua Catalana</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+  body {
+  background: linear-gradient(to bottom, rgb(55, 55, 243), blue, #4c1d95, #1e1b4b, #0f0a2b);
+}
+
+   .app {
+  max-width: 900px;
+  width: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.85),
+    rgba(245,245,245,0.8)
+  );
+  border-radius: 20px;
+  padding: 1.7rem 2rem;
+  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 0.65rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+    }
+
+    button.primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
+
+    button.secondary {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    button.secondary:hover {
+      transform: scale(1.05);
+      background: #d1d5db;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .questions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .question-card {
+      border-radius: 0.9rem;
+      border: 1px solid #e5e7eb;
+      padding: 0.9rem 1rem;
+      background: #f9fafb;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .question-number {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #6b7280;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: background 0.15s, transform 0.05s;
+      cursor: pointer;
+    }
+
+    .answer-option:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .answer-option input {
+      margin-top: 0.15rem;
+      cursor: pointer;
+    }
+
+    .answer-text {
+      font-size: 0.9rem;
+    }
+
+    .answer-option.correct {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+    }
+
+    .answer-option.incorrect {
+      background: #fee2e2;
+      border: 1px solid #dc2626;
+    }
+
+    .answer-option.unselected-correct {
+      background: #ecfdf5;
+      border: 1px dashed #16a34a;
+    }
+
+    .results {
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .score { font-weight: 600; }
+    .score.good { color: #16a34a; }
+    .score.medium { color: #f59e0b; }
+    .score.bad { color: #dc2626; }
+
+    @media (max-width: 640px) {
+      .app { padding: 1rem; border-radius: 0.75rem; }
+      .question-card { padding: 0.8rem 0.75rem; }
+    }
+
+    body {
+      margin: 0;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.70);
+      backdrop-filter: blur(2px);
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Llengua Catalana</h1>
+
+    <div class="controls">
+      <button id="checkBtn" class="primary">Corregir test</button>
+      <button id="resetBtn" class="secondary">Reiniciar / Nou ordre</button>
+    </div>
+
+    <div id="questionsContainer" class="questions"></div>
+
+    <div id="results" class="results" style="display:none;">
+      <div id="scoreText" class="score"></div>
+      <div id="detailText"></div>
+    </div>
+  </div>
+
+  <script>
+    const questionsData = [
+      {
+        text: "A quina d'aquestes paraules la \"l·l\" es pronuncia amb una pausa entre les dues \"l\"?",
+        answers: [
+          { text: "Vella", correct: false },
+          { text: "All", correct: false },
+          { text: "Col·legi", correct: true },
+          { text: "Allò", correct: false }
+        ]
+      },
+      {
+        text: "A quina de les següents regions el català no és una llengua oficial?",
+        answers: [
+          { text: "Andorra", correct: false },
+          { text: "Catalunya", correct: false },
+          { text: "Franja de Ponent", correct: true },
+          { text: "Illes Balears", correct: false }
+        ]
+      },
+      {
+        text: "Com es diu \"médico\" en català?",
+        answers: [
+          { text: "Metge", correct: true },
+          { text: "Advocat", correct: false },
+          { text: "Enginyer", correct: false },
+          { text: "Professor", correct: false }
+        ]
+      },
+      {
+        text: "Com es diu \"nuestros amigos\" en català?",
+        answers: [
+          { text: "Els nostres amics", correct: true },
+          { text: "Els vostres amics", correct: false },
+          { text: "Els seus amics", correct: false },
+          { text: "Els teus amics", correct: false }
+        ]
+      },
+      {
+        text: "Com preguntaries \"¿A qué nombre está la reserva?\" en català?",
+        answers: [
+          { text: "Qui ha fet la reserva?", correct: false },
+          { text: "A quin nom està la reserva?", correct: true },
+          { text: "Qui ha reservat?", correct: false },
+          { text: "Com es diu la reserva?", correct: false }
+        ]
+      },
+      {
+        text: "Com s'escriu el número 1.234 en català?",
+        answers: [
+          { text: "Mil dos-cents trenta-quatre", correct: true },
+          { text: "Un-mil-dos-cents-trenta-quatre", correct: false },
+          { text: "Mil-dos-cent-trenta-quatre", correct: false },
+          { text: "Un-mil-dos-cent-trenta-quatre", correct: false }
+        ]
+      },
+      {
+        text: "Completa el buit amb la forma correcta del verb en imperatiu: \"_______ (parlar, vosaltres) més a poc a poc, si us plau.\"",
+        answers: [
+          { text: "Parlau", correct: false },
+          { text: "Parli", correct: false },
+          { text: "Parleu", correct: true },
+          { text: "Parlarem", correct: false }
+        ]
+      },
+      {
+        text: "Completa el buit: \"D'aquí a un mes ________ un viatge a Roma.\"",
+        answers: [
+          { text: "fauré", correct: false },
+          { text: "faré", correct: true },
+          { text: "faria", correct: false },
+          { text: "faría", correct: false }
+        ]
+      },
+      {
+        text: "Completa l'oració: \"Els dies de la setmana són dilluns, dimarts, dimecres, dijous, divendres, dissabte i _______.\"",
+        answers: [
+          { text: "Gener", correct: false },
+          { text: "Abril", correct: false },
+          { text: "Diumenge", correct: true },
+          { text: "Febrer", correct: false }
+        ]
+      },
+      {
+        text: "Què és un perfil professional?",
+        answers: [
+          { text: "Un document legal per treballar en una empresa.", correct: false },
+          { text: "Una breu descripció de les habilitats, experiència i objectius d'una persona en l'àmbit laboral.", correct: true },
+          { text: "Un llistat de totes les feines que has tingut.", correct: false },
+          { text: "Un certificat acadèmic.", correct: false }
+        ]
+      },
+      {
+        text: "Què és una bona pràctica durant una entrevista de feina?",
+        answers: [
+          { text: "Mantenir el contacte visual", correct: true },
+          { text: "Moure's constantment", correct: false },
+          { text: "Parlar amb veu baixa", correct: false },
+          { text: "Creuar els braços", correct: false }
+        ]
+      },
+      {
+        text: "Quin d'aquests mots és un fals amic entre el català i el castellà?",
+        answers: [
+          { text: "Llibre", correct: false },
+          { text: "Assumir", correct: false },
+          { text: "Aprovar", correct: false },
+          { text: "Llevar", correct: true }
+        ]
+      },
+      {
+        text: "Quin d'aquests verbs pertany a la segona conjugació (-er/-re)?",
+        answers: [
+          { text: "Cantar", correct: false },
+          { text: "Escórrer", correct: true },
+          { text: "Fregir", correct: false },
+          { text: "Saltar", correct: false }
+        ]
+      },
+      {
+        text: "Quin és el gerundi del verb \"parlar\"?",
+        answers: [
+          { text: "Parlent", correct: false },
+          { text: "Parlat", correct: false },
+          { text: "Parlador", correct: false },
+          { text: "Parlant", correct: true }
+        ]
+      },
+      {
+        text: "Quin és el mes que ve després de juliol?",
+        answers: [
+          { text: "Juny", correct: false },
+          { text: "Setembre", correct: false },
+          { text: "Agost", correct: true },
+          { text: "Octubre", correct: false }
+        ]
+      },
+      {
+        text: "Quin és el pronom correcte per a la primera persona del plural?",
+        answers: [
+          { text: "Vosaltres", correct: false },
+          { text: "Nosaltres", correct: true },
+          { text: "Ells", correct: false },
+          { text: "Vostès", correct: false }
+        ]
+      },
+      {
+        text: "Quin és l'article definit per a un substantiu masculí singular en català?",
+        answers: [
+          { text: "Els", correct: false },
+          { text: "La", correct: false },
+          { text: "El", correct: true },
+          { text: "Un", correct: false }
+        ]
+      },
+      {
+        text: "Quin és l'equivalent en català de \"cuchara\"?",
+        answers: [
+          { text: "Ganivet", correct: false },
+          { text: "Plat", correct: false },
+          { text: "Forquilla", correct: false },
+          { text: "Cullera", correct: true }
+        ]
+      },
+      {
+        text: "Quin és l'ús principal del verb \"parlar\" en català?",
+        answers: [
+          { text: "Per a expressar localització.", correct: false },
+          { text: "Per a descriure professions.", correct: false },
+          { text: "Per a expressar la capacitat de parlar idiomes o comunicar-se.", correct: true },
+          { text: "Per a expressar estats temporals.", correct: false }
+        ]
+      },
+      {
+        text: "Quin és un element fonamental d'un Currículum Vitae (CV)?",
+        answers: [
+          { text: "Data de naixement", correct: false },
+          { text: "Objectiu professional", correct: true },
+          { text: "Nom dels familiars", correct: false },
+          { text: "Color preferit", correct: false }
+        ]
+      },
+      {
+        text: "Quin és un exemple d'objectiu professional ben definit segons el mètode SMART?",
+        answers: [
+          { text: "\"Vull trobar una feina algun dia.\"", correct: false },
+          { text: "\"M'agradaria millorar en el meu treball sense cap pla concret.\"", correct: false },
+          { text: "\"Obtenir una certificació en màrqueting digital en els propers sis mesos.\"", correct: true },
+          { text: "\"Vull ser el millor en la meva feina, sense importar el temps que trigui.\"", correct: false }
+        ]
+      },
+      {
+        text: "Quin verb en català s'utilitza per a expressar localització i estats temporals?",
+        answers: [
+          { text: "Ser", correct: false },
+          { text: "Estar", correct: true },
+          { text: "Dir-se", correct: false },
+          { text: "Parlar", correct: false }
+        ]
+      },
+      {
+        text: "Quina d'aquestes frases conté un pronom relatiu?",
+        answers: [
+          { text: "M'agrada llegir llibres interessants.", correct: false },
+          { text: "La casa on visc és molt gran.", correct: true },
+          { text: "Tinc molta feina avui.", correct: false },
+          { text: "Demà anirem al cinema.", correct: false }
+        ]
+      },
+      {
+        text: "Quina d'aquestes frases és correcta per indicar la teva edat en català?",
+        answers: [
+          { text: "Jo soc 30 anys.", correct: false },
+          { text: "Jo tinc 30 anys.", correct: true },
+          { text: "Jo estic 30 anys.", correct: false },
+          { text: "Jo parlo 30 anys.", correct: false }
+        ]
+      },
+      {
+        text: "Quina d'aquestes professions correspon a \"mecánico/mecánica\" en català?",
+        answers: [
+          { text: "Enginyer/enginyera", correct: false },
+          { text: "Fuster/fustera", correct: false },
+          { text: "Mecànic/mecànica", correct: true },
+          { text: "Administratiu/administrativa", correct: false }
+        ]
+      },
+      {
+        text: "Quina de les següents frases expressa una obligació en el futur de manera correcta?",
+        answers: [
+          { text: "He d'estudiar demà.", correct: false },
+          { text: "Hauré de fer els deures demà.", correct: true },
+          { text: "Tinc que anar al metge demà.", correct: false },
+          { text: "Vaig a haver de treballar demà.", correct: false }
+        ]
+      },
+      {
+        text: "Quina de les següents hores correspon a \"Es la una y cuarto\" en català?",
+        answers: [
+          { text: "És un quart de dues", correct: true },
+          { text: "És dos quarts de dues", correct: false },
+          { text: "És tres quarts de dues", correct: false },
+          { text: "És un quart de tres", correct: false }
+        ]
+      },
+      {
+        text: "Quina és la definició correcta d'\"acostar\" en català?",
+        answers: [
+          { text: "Alejar", correct: false },
+          { text: "Penjar", correct: false },
+          { text: "Apropar-se", correct: true },
+          { text: "Treure", correct: false }
+        ]
+      },
+      {
+        text: "Quina és la diferència entre una pregunta oberta i una pregunta tancada?",
+        answers: [
+          { text: "Les preguntes obertes només es poden respondre amb \"sí\" o \"no\".", correct: false },
+          { text: "Les preguntes tancades sempre inclouen un pronom relatiu.", correct: false },
+          { text: "Les preguntes obertes requereixen una resposta més detallada.", correct: true },
+          { text: "No hi ha diferència entre ambdues.", correct: false }
+        ]
+      },
+      {
+        text: "Quina és la forma correcta del condicional simple del verb \"menjar\" per a la tercera persona del singular?",
+        answers: [
+          { text: "Menjarà", correct: false },
+          { text: "Menjaria", correct: true },
+          { text: "Menjarien", correct: false },
+          { text: "Menjarem", correct: false }
+        ]
+      },
+      {
+        text: "Quina és la terminació correcta per al futur simple del verb \"parlar\" en primera persona del singular?",
+        answers: [
+          { text: "Parlaria", correct: false },
+          { text: "Parlaré", correct: true },
+          { text: "Parlava", correct: false },
+          { text: "Parlarem", correct: false }
+        ]
+      },
+      {
+        text: "Quina és la traducció correcta de \"mesa\" en català?",
+        answers: [
+          { text: "Cadira", correct: false },
+          { text: "Plat", correct: false },
+          { text: "Taula", correct: true },
+          { text: "Got", correct: false }
+        ]
+      },
+      {
+        text: "Quina és una bona pràctica per escriure un correu electrònic professional?",
+        answers: [
+          { text: "Ometre la salutació per anar directament al cos del correu", correct: false },
+          { text: "Utilitzar un assumpte clar i concís.", correct: true },
+          { text: "Escriure en majúscules per destacar la informació important.", correct: false },
+          { text: "Fer-lo molt llarg i detallat perquè no falti cap informació.", correct: false }
+        ]
+      },
+      {
+        text: "Quina és una manera efectiva d'acabar un correu electrònic professional?",
+        answers: [
+          { text: "\"Ja està.\"", correct: false },
+          { text: "\"Ens veiem!\"", correct: false },
+          { text: "\"Atentament, [El teu nom].\"", correct: true },
+          { text: "\"Bueno, ja em diràs alguna cosa.\"", correct: false }
+        ]
+      },
+      {
+        text: "Quina estructura és correcta per a una frase negativa en català?",
+        answers: [
+          { text: "Menjo no carn", correct: false },
+          { text: "No menjo carn", correct: true },
+          { text: "Carn menjo no", correct: false },
+          { text: "Menjo carn no", correct: false }
+        ]
+      },
+      {
+        text: "Quina expressió utilitzaries per a dir \"Quiero confirmar mi reserva\" en català?",
+        answers: [
+          { text: "Vull confirmar la meva reserva", correct: true },
+          { text: "Vull fer una reserva", correct: false },
+          { text: "Té algun número de telèfon?", correct: false },
+          { text: "A quin número?", correct: false }
+        ]
+      },
+      {
+        text: "Quina opció conté participis correctament formats?",
+        answers: [
+          { text: "Corrent, admetint, dormint", correct: false },
+          { text: "Rebut, parlada, dormida", correct: true },
+          { text: "Canta, córrer, admetre", correct: false },
+          { text: "Cantant, rebent, admès", correct: false }
+        ]
+      },
+      {
+        text: "Quina opció mostra una dièresi correcta en una paraula catalana?",
+        answers: [
+          { text: "país", correct: false },
+          { text: "heroi", correct: false },
+          { text: "veïna", correct: true },
+          { text: "peüs", correct: false }
+        ]
+      },
+      {
+        text: "Quina tècnica de comunicació és clau durant una trucada professional?",
+        answers: [
+          { text: "Parlar molt ràpid", correct: false },
+          { text: "Escoltar activament", correct: true },
+          { text: "Utilitzar molts tecnicismes", correct: false },
+          { text: "Evitar preguntar", correct: false }
+        ]
+      },
+      {
+        text: "Quins són els pronoms febles reflexius?",
+        answers: [
+          { text: "el, la, els, les", correct: false },
+          { text: "em, et, es, ens, us, es", correct: true },
+          { text: "hi, en", correct: false },
+          { text: "me'n, te'n, se'n, ens en, us en, se'n", correct: false }
+        ]
+      }
+    ];
+
+    // =====================================
+    // LÒGICA DEL TEST
+    // =====================================
+
+    const questionsContainer = document.getElementById("questionsContainer");
+    const checkBtn = document.getElementById("checkBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultsBox = document.getElementById("results");
+    const scoreText = document.getElementById("scoreText");
+    const detailText = document.getElementById("detailText");
+
+    let quizState = [];
+
+    function shuffleArray(array) {
+      return array
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value);
+    }
+
+    function buildQuiz() {
+      questionsContainer.innerHTML = "";
+      resultsBox.style.display = "none";
+      checkBtn.disabled = false;
+
+      quizState = questionsData.map((q, index) => {
+        const shuffledAnswers = shuffleArray([...q.answers]);
+        const questionId = "q" + index;
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.dataset.questionId = questionId;
+
+        const header = document.createElement("div");
+        header.className = "question-header";
+
+        const num = document.createElement("div");
+        num.className = "question-number";
+        num.textContent = "Pregunta " + (index + 1);
+
+        const text = document.createElement("div");
+        text.className = "question-text";
+        text.textContent = q.text;
+
+        header.appendChild(num);
+        header.appendChild(text);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        shuffledAnswers.forEach((ans, ansIndex) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = questionId;
+          input.value = ansIndex;
+          input.dataset.correct = ans.correct ? "true" : "false";
+
+          const span = document.createElement("span");
+          span.className = "answer-text";
+          span.textContent = ans.text;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          answersDiv.appendChild(label);
+        });
+
+        card.appendChild(header);
+        card.appendChild(answersDiv);
+        questionsContainer.appendChild(card);
+
+        return { questionId, element: card };
+      });
+    }
+
+    function gradeQuiz() {
+      let correctCount = 0;
+      let unanswered = 0;
+
+      quizState.forEach((q) => {
+        const card = q.element;
+        const options = card.querySelectorAll(".answer-option");
+        let selectedInput = null;
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          opt.classList.remove("correct", "incorrect", "unselected-correct");
+          if (input.checked) selectedInput = input;
+        });
+
+        if (!selectedInput) {
+          unanswered++;
+        } else if (selectedInput.dataset.correct === "true") {
+          correctCount++;
+        }
+
+        options.forEach(opt => {
+          const input = opt.querySelector("input");
+          input.disabled = true;
+
+          if (input.dataset.correct === "true" && input.checked) {
+            opt.classList.add("correct");
+          } else if (input.dataset.correct === "false" && input.checked) {
+            opt.classList.add("incorrect");
+          } else if (input.dataset.correct === "true" && !input.checked) {
+            opt.classList.add("unselected-correct");
+          }
+        });
+      });
+
+      const total = questionsData.length;
+      const percentage = (correctCount / total) * 100;
+
+      let gradeClass = "bad";
+      if (percentage >= 80) gradeClass = "good";
+      else if (percentage >= 50) gradeClass = "medium";
+
+      scoreText.className = "score " + gradeClass;
+      scoreText.textContent = `Resultat: ${correctCount} de ${total} (${percentage.toFixed(1)}%)`;
+
+      let detail = "";
+      if (unanswered > 0) detail += `Preguntes sense respondre: ${unanswered}. `;
+      if (percentage >= 80) detail += "Molt bon treball, domines el tema ✅";
+      else if (percentage >= 50) detail += "No està malament, però pots repassar alguns conceptes 👍";
+      else detail += "Et convé repassar el contingut abans de l'examen 📚";
+
+      detailText.textContent = detail;
+      resultsBox.style.display = "flex";
+      checkBtn.disabled = true;
+    }
+
+    checkBtn.addEventListener("click", gradeQuiz);
+    resetBtn.addEventListener("click", buildQuiz);
+
+    buildQuiz();
+  </script>
+</body>
+</html>
