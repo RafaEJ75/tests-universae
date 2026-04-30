@@ -123,58 +123,6 @@
       box-shadow: 0 0 8px var(--shadow-accent);
     }
 
-    .theme-switcher {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 8px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-    }
-
-    .theme-label {
-      font-size: 0.76rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .theme-buttons {
-      display: inline-flex;
-      gap: 4px;
-    }
-
-    .theme-btn {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: #020617;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .theme-btn span {
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      display: block;
-    }
-
-    .theme-btn[data-theme="blue"] span { background: linear-gradient(135deg, #3b82f6, #22c1c3); }
-   
-
-    .theme-btn.active {
-      border-color: var(--accent);
-      box-shadow: 0 0 10px var(--shadow-accent);
-      transform: translateY(-1px);
-    }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
