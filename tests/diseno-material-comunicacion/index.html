@@ -219,6 +219,44 @@
         padding: 0.8rem 0.75rem;
       }
     }
+
+    .fab-wrap {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      align-items: flex-end;
+    }
+    .fab-reset {
+      background: #e5e7eb;
+      color: #111827;
+      border: none;
+      border-radius: 999px;
+      padding: 0.8rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .fab-reset:hover { transform: scale(1.06); background: #d1d5db; }
+    .fab-check {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.8rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(22,163,74,0.45);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+    }
+    .fab-check:hover { transform: scale(1.06); box-shadow: 0 8px 28px rgba(22,163,74,0.55); }
+    .fab-check.hidden { opacity: 0; pointer-events: none; transform: scale(0.85); }
   </style>
 </head>
 <body>
@@ -226,8 +264,8 @@
     <h1>Diseño y elaboración de material de comunicación</h1>
 
     <div class="controls">
-      <button id="checkBtn" class="primary">Corregir test</button>
-      <button id="resetBtn" class="secondary">Reiniciar / Nuevo orden</button>
+      
+      
     </div>
 
     <div id="questionsContainer" class="questions"></div>
@@ -239,6 +277,8 @@
   </div>
 
   <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
     const questionsData = [
       {
         text: "Una Wiki es:",
@@ -603,8 +643,6 @@
     ];
 
     const questionsContainer = document.getElementById("questionsContainer");
-    const checkBtn = document.getElementById("checkBtn");
-    const resetBtn = document.getElementById("resetBtn");
     const resultsBox = document.getElementById("results");
     const scoreText = document.getElementById("scoreText");
     const detailText = document.getElementById("detailText");
@@ -621,7 +659,7 @@
     function buildQuiz() {
       questionsContainer.innerHTML = "";
       resultsBox.style.display = "none";
-      checkBtn.disabled = false;
+      document.getElementById("fabCheck").classList.remove("hidden");
 
       quizState = questionsData.map((q, index) => {
         const shuffledAnswers = shuffleArray([...q.answers]);
@@ -736,14 +774,20 @@
 
       detailText.textContent = detail;
       resultsBox.style.display = "flex";
-      checkBtn.disabled = true;
+      document.getElementById("fabCheck").classList.add("hidden");
     }
 
-    checkBtn.addEventListener("click", gradeQuiz);
-    resetBtn.addEventListener("click", buildQuiz);
+    document.getElementById("fabCheck").addEventListener("click", gradeQuiz);
+    document.getElementById("fabReset").addEventListener("click", buildQuiz);
 
     buildQuiz();
+  
+    });
   </script>
+
+  <div class="fab-wrap">
+    <button class="fab-reset" id="fabReset">↺ Reiniciar</button>
+    <button class="fab-check" id="fabCheck">✔ Corregir</button>
+  </div>
 </body>
 </html>
-
