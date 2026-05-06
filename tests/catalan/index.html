@@ -2,7 +2,7 @@
 <html lang="ca">
 <head>
   <meta charset="UTF-8" />
-  <title>Llengua Catalana</title>
+  <title>Catalan</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -198,15 +198,70 @@
       backdrop-filter: blur(2px);
       z-index: -1;
     }
+
+    .fab-check {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 999;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(22,163,74,0.45);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 0.01em;
+    }
+    
+    .fab-reset {
+      position: fixed;
+      bottom: 5.5rem;
+      right: 1.5rem;
+      z-index: 999;
+      background: #e5e7eb;
+      color: #111827;
+      border: none;
+      border-radius: 999px;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 0.01em;
+    }
+    .fab-reset:hover {
+      transform: scale(1.07);
+      background: #d1d5db;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+
+    .fab-check:hover {
+      transform: scale(1.07);
+      box-shadow: 0 8px 28px rgba(22,163,74,0.55);
+    }
+    .fab-check.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.85);
+    }
   </style>
 </head>
 <body>
   <div class="app">
-    <h1>Catalán profesional</h1>
+    <h1>Catalan</h1>
 
     <div class="controls">
-      <button id="checkBtn" class="primary">Corregir test</button>
-      <button id="resetBtn" class="secondary">Reiniciar / Nou ordre</button>
     </div>
 
     <div id="questionsContainer" class="questions"></div>
@@ -217,7 +272,11 @@
     </div>
   </div>
 
-  <script>
+  <button class="fab-reset" id="fabReset">↺ Reiniciar</button>
+
+  <button class="fab-check" id="fabCheck">✔ Corregir</button>
+
+  <script defer>
     const questionsData = [
       {
         text: "A quina d'aquestes paraules la \"l·l\" es pronuncia amb una pausa entre les dues \"l\"?",
@@ -586,8 +645,6 @@
     // =====================================
 
     const questionsContainer = document.getElementById("questionsContainer");
-    const checkBtn = document.getElementById("checkBtn");
-    const resetBtn = document.getElementById("resetBtn");
     const resultsBox = document.getElementById("results");
     const scoreText = document.getElementById("scoreText");
     const detailText = document.getElementById("detailText");
@@ -604,7 +661,7 @@
     function buildQuiz() {
       questionsContainer.innerHTML = "";
       resultsBox.style.display = "none";
-      checkBtn.disabled = false;
+      document.getElementById("fabCheck").classList.remove("hidden");
 
       quizState = questionsData.map((q, index) => {
         const shuffledAnswers = shuffleArray([...q.answers]);
@@ -710,11 +767,11 @@
 
       detailText.textContent = detail;
       resultsBox.style.display = "flex";
-      checkBtn.disabled = true;
+      document.getElementById("fabCheck").classList.add("hidden");
     }
 
-    checkBtn.addEventListener("click", gradeQuiz);
-    resetBtn.addEventListener("click", buildQuiz);
+    document.getElementById("fabCheck").addEventListener("click", gradeQuiz);
+    document.getElementById("fabReset").addEventListener("click", buildQuiz);
 
     buildQuiz();
   </script>
